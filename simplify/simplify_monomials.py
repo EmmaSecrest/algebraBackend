@@ -13,4 +13,10 @@ def simplify_monomials(expression):
             count = 1
     result += expression[-1] + ('^' + str(count) if count > 1 else '')
     return result
-    
+
+def simplify_polynomials(expression):
+    expression = expression.split('+')
+    result = ''
+    for i in range(len(expression)):
+        result += simplify_monomials(expression[i]) + ('+' if i < len(expression) - 1 else '')
+    return result
