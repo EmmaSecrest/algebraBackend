@@ -2,8 +2,17 @@ import re
 from collections import Counter
 
 def simplify_monomials(term):
+    # Split the term into variables and their powers
+    variables_and_powers = re.findall(r'([a-z]\*\*\d+|[a-z])', term)
+
     # Count the occurrences of each variable in the term
-    variable_counts = Counter(term)
+    variable_counts = Counter()
+    for vp in variables_and_powers:
+        if '**' in vp:
+            variable, power = vp.split('**')
+            variable_counts[variable] += int(power)
+        else:
+            variable_counts[vp] += 1
 
     # If all symbols are the same, return the symbol raised to the power of the count
     if len(variable_counts) == 1:
@@ -13,10 +22,10 @@ def simplify_monomials(term):
     # Otherwise, build the simplified term
     simplified_term = ''
     for variable, count in variable_counts.items():
-        simplified_term += f'{variable}**{count}' if count > 1 else variable
+        simplified_term += f'{variable}**{count}' if count > 1 else f'{variable}'
 
     return simplified_term
-  
+
 
 def simplify_polynomials(expression):
     # Split the expression into terms
@@ -37,4 +46,3 @@ def simplify_polynomials(expression):
         simplified_expression += f'+{constants}'
 
     return simplified_expression
-
