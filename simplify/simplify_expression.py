@@ -8,12 +8,12 @@ def simplify_monomials(term):
     # If all symbols are the same, return the symbol raised to the power of the count
     if len(variable_counts) == 1:
         variable, count = variable_counts.popitem()
-        return f'{variable}^{count}' if count > 1 else variable
+        return f'{variable}**{count}' if count > 1 else variable
 
     # Otherwise, build the simplified term
     simplified_term = ''
     for variable, count in variable_counts.items():
-        simplified_term += f'{variable}^{count}' if count > 1 else variable
+        simplified_term += f'{variable}**{count}' if count > 1 else variable
 
     return simplified_term
   
