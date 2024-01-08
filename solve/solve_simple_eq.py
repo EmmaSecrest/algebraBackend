@@ -1,9 +1,9 @@
-from sympy import Symbol, solve
+from sympy import Symbol
 from simplify.simplify_expression import simplify_polynomials
+import re
 
-
-def solve_simple_eq(equation):
-    # Splitting the equation into two parts
+def set_up_to_solve(equation):
+  # Splitting the equation into two parts
     parts = equation.split('=')
     before_equal = parts[0]
     after_equal = parts[1].strip()
@@ -19,6 +19,11 @@ def solve_simple_eq(equation):
     print("simplified: ", simplified)
 
     return simplified
+
+
+
+def solve_simple_eq(equation):
+    new_eq = set_up_to_solve(equation)
 
 
 

@@ -1,65 +1,48 @@
 import re
-from collections import Counter
+from collections import defaultdict
 
 def simplify_monomials(term):
-    # Split the term into variables and their powers
-    variables_and_powers = re.findall(r'([a-z]\*\*\d+|[a-z])', term)
+    variable_counts = defaultdict(int)
+    coefficient = 1
 
-    # Count the occurrences of each variable in the term
-    variable_counts = Counter()
-    for vp in variables_and_powers:
-        if '**' in vp:
-            variable, power = vp.split('**')
-            variable_counts[variable] += int(power)
-        else:
-            variable_counts[vp] += 1
+    for cv in re.findall('(-?\d*)?([a-z])', term):
+        if cv[1]:
+            variable_counts[cv[1]] += int(cv[0]) if cv[0] else 1
+        elif cv[0]:
+            coefficient *= int(cv[0])
 
-    # If all symbols are the same, return the symbol raised to the power of the count
     if len(variable_counts) == 1:
         variable, count = variable_counts.popitem()
-        return f'{variable}**{count}' if count > 1 else variable
-
-    # Otherwise, build the simplified term
-    simplified_term = ''
-    for variable, count in variable_counts.items():
-        simplified_term += f'{variable}**{count}' if count > 1 else f'{variable}'
-
-    return simplified_term
-
+        return f'{coefficient}{variable}**{count}' if count > 1 else f'{coefficient}{variable}'
+    elif len(variable_counts) > 1:
+        simplified_term = ''.join(f'{variable}**{count}' if count > 1 else f'{variable}' for variable, count in variable_counts.items())
+        return f'{coefficient}{simplified_term}' if coefficient != 1 else simplified_term
+    else:
+        return str(coefficient)
 
 def simplify_polynomials(expression):
-    simplified_terms = []
-    constants = 0
-
     # Split the expression into terms
     terms = re.split('([+-])', expression)
+    # Initialize a dictionary to hold the coefficients of each term
+    coefficients = defaultdict(int)
 
-    # Iterate through each term
+    # Iterate over the terms
     for i in range(0, len(terms), 2):
-        # Check if the term is a constant
-        if terms[i].isdigit() or (terms[i][0] == '-' and terms[i][1:].isdigit()):
-            # Handle subtraction
-            if i > 0 and terms[i-1] == '-':
-                constants -= int(terms[i])
-            else:
-                constants += int(terms[i])
-        else:
-            # Simplify the non-constant term and add it to the list
-            simplified_term = simplify_monomials(terms[i])
-            if simplified_term:
-                simplified_terms.append(simplified_term)
+        # Simplify the current term
+        simplified_term = simplify_monomials(terms[i])
+        if simplified_term:
+            # Determine the coefficient of the current term
+            coefficient = int(terms[i - 1] + '1') if i > 0 and terms[i - 1] == '-' else 1
+            # Add the coefficient to the total for this term
+            coefficients[simplified_term] += coefficient
 
-    # Count the occurrences of each simplified term
-    term_counts = Counter(simplified_terms)
+    # Sort the dictionary items based on variable names
+    sorted_coefficients = sorted(coefficients.items(), key=lambda x: x[0])
 
     # Combine the terms back into a single expression
-    simplified_expression = '+'.join(f'{count if count > 1 else ""}{term}' for term, count in term_counts.items())
-
-    # Add the sum of the constants to the expression
-    if constants != 0:
-        if constants > 0:
-            simplified_expression += f'+{constants}'
-        else:
-            simplified_expression += str(constants)  # '-' sign is included in str(constants) if constants < 0
-
+    simplified_expression = '+'.join(f'{"" if count == 1 else count}{term}' for term, count in sorted_coefficients if count != 0)
+    # Replace '+-' with '-' for subtraction
+    simplified_expression = simplified_expression.replace('+-', '-')
     return simplified_expression
+
+
