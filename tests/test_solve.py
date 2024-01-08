@@ -1,3 +1,4 @@
+#to run tests use python -m unittest discover
 import unittest
 import sys
 sys.path.append('../solve')  
