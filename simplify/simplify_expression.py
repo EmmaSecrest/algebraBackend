@@ -5,9 +5,10 @@ def simplify_monomials(expression):
     variable_counts = defaultdict(int)
     coefficient = 1
 
-    for cv in re.findall('(-?\d*)?([a-z])', expression):
+    for cv in re.findall('(-?\d*)?([a-z]*)', expression):
         if cv[1]:
-            variable_counts[cv[1]] += int(cv[0]) if cv[0] else 1
+            for variable in cv[1]:
+                variable_counts[variable] += int(cv[0]) if cv[0] else 1
         elif cv[0]:
             coefficient *= int(cv[0])
 
@@ -25,13 +26,23 @@ def simplify_polynomials(expression):
     monomials = re.split(r'([+-])', expression)
 
     # Simplify each monomial using the simplify_monomials function
-    simplified_monomials = [simplify_monomials(monomial) for monomial in monomials]
+    simplified_monomials = [simplify_monomials(monomial) if monomial not in ['+', '-'] else monomial for monomial in monomials]
 
-    # Join the simplified monomials back into a single expression
-    simplified_expression = ''.join(simplified_monomials)
+    # Group and count the 'x' terms
+    x_counts = defaultdict(int)
+    for i, monomial in enumerate(simplified_monomials):
+        if 'x' in monomial:
+            variable = monomial.split('x')[1]
+            print("variable", variable)
+            count = x_counts[variable]
+            simplified_monomials[i] = f'{count if count != 1 else ""}x{variable}'
+            print("simplified_monomials[i]", simplified_monomials[i])
 
-    # Remove leading '+' if present
-    if simplified_expression.startswith('+'):
-        simplified_expression = simplified_expression[1:]
+    # Replace the 'x' terms in the simplified monomials with their counts
+    for i, monomial in enumerate(simplified_monomials):
+        if 'x' in monomial:
+           count = x_counts[variable]
+           simplified_monomials[i] = f'{count if count != 0 else ""}x{variable}'
 
-    return simplified_expression
+    # Join the simplified monomials with '+'
+    return ''.join(simplified_monomials)
