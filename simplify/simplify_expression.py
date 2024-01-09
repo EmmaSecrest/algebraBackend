@@ -1,11 +1,11 @@
 import re
 from collections import defaultdict
 
-def simplify_monomials(term):
+def simplify_monomials(expression):
     variable_counts = defaultdict(int)
     coefficient = 1
 
-    for cv in re.findall('(-?\d*)?([a-z])', term):
+    for cv in re.findall('(-?\d*)?([a-z])', expression):
         if cv[1]:
             variable_counts[cv[1]] += int(cv[0]) if cv[0] else 1
         elif cv[0]:
@@ -21,28 +21,17 @@ def simplify_monomials(term):
         return str(coefficient)
 
 def simplify_polynomials(expression):
-    # Split the expression into terms
-    terms = re.split('([+-])', expression)
-    # Initialize a dictionary to hold the coefficients of each term
-    coefficients = defaultdict(int)
+    # Split the input expression into monomials
+    monomials = re.split(r'([+-])', expression)
 
-    # Iterate over the terms
-    for i in range(0, len(terms), 2):
-        # Simplify the current term
-        simplified_term = simplify_monomials(terms[i])
-        if simplified_term:
-            # Determine the coefficient of the current term
-            coefficient = int(terms[i - 1] + '1') if i > 0 and terms[i - 1] == '-' else 1
-            # Add the coefficient to the total for this term
-            coefficients[simplified_term] += coefficient
+    # Simplify each monomial using the simplify_monomials function
+    simplified_monomials = [simplify_monomials(monomial) for monomial in monomials]
 
-    # Sort the dictionary items based on variable names
-    sorted_coefficients = sorted(coefficients.items(), key=lambda x: x[0])
+    # Join the simplified monomials back into a single expression
+    simplified_expression = ''.join(simplified_monomials)
 
-    # Combine the terms back into a single expression
-    simplified_expression = '+'.join(f'{"" if count == 1 else count}{term}' for term, count in sorted_coefficients if count != 0)
-    # Replace '+-' with '-' for subtraction
-    simplified_expression = simplified_expression.replace('+-', '-')
+    # Remove leading '+' if present
+    if simplified_expression.startswith('+'):
+        simplified_expression = simplified_expression[1:]
+
     return simplified_expression
-
-
