@@ -29,7 +29,7 @@ def solve_simple_eq(equation):
     degree = find_degree(new_eq)
     left,right = equation.split('=')
     
-    result = ''
+    result = []
     
     if degree < 2:
         if degree == 1:
@@ -38,10 +38,11 @@ def solve_simple_eq(equation):
             print("length of first element",len(split[0]))
             length_of_first_element = len(split[0])
             if length_of_first_element == 1:
-              result = split[0] + " = " + split[1]
-            else:
-                #do full two step solve
-                pass
+                opposite = - int(split[1])
+                result = ["adding " + str(opposite) + " to both sides of the equation" , split[0] + " = " + split[1]]
+            if length_of_first_element > 1:
+                print("new_eq",new_eq)
+                
         else:
             #solve quadratic equation
             pass

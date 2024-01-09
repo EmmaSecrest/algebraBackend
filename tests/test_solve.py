@@ -8,8 +8,8 @@ from solve.solve_simple_eq import find_degree
 
 class TestSolveSimpleEq(unittest.TestCase):
     def test_solve_simple_eq(self):
-        self.assertEqual(solve_simple_eq("x+1=2"),'x = 1')
-        #self.assertEqual(solve_simple_eq("2x = -4"),'x = -2')
+        self.assertEqual(solve_simple_eq("x+1=2"),['adding -1 to both sides of the equation', 'x = 1'])
+        self.assertEqual(solve_simple_eq("2*x = -4"),'x = -2')
         
         
 class TestSetUpToSolver(unittest.TestCase):
