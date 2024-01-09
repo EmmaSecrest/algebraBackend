@@ -5,7 +5,7 @@ import re
 def set_up_to_solve(equation):
     left, right = equation.split('=')
     right = int(right)
-    left = simplify_polynomials(left) - right
+    left = simplify_polynomials(left) - str(right)
     return f'{left}=0'
 
 
