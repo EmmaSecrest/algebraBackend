@@ -4,9 +4,12 @@ import re
 
 def set_up_to_solve(equation):
     left, right = equation.split('=')
-    right = int(right)
-    left = simplify_polynomials(left) - str(right)
-    return f'{left}=0'
+    # Simplify the left and right sides of the equation
+    left = simplify_polynomials(left)
+    right = simplify_polynomials(right)
+    # Subtract the right side from the left side and simplify the result
+    simplified = simplify_polynomials(f'{left} - ({right})')
+    return f'{simplified} = 0'
 
 
 
