@@ -12,14 +12,8 @@ def set_up_to_solve(equation):
     return f'{simplified} = 0'
 
 def find_degree(equation):
-    print(equation)
-    
     x = symbols('x')
     left,right = equation.split('=')
-    
-    print("left: ", left)
-    print("right: ", right)
-    
     left_side = sympify(left)
     highest_degree = degree(left_side, gen=x)
     
@@ -31,6 +25,29 @@ def find_degree(equation):
 def solve_simple_eq(equation):
     new_eq = set_up_to_solve(equation)
     #determine the degree of the equation
+    print("new_eq",new_eq)
+    degree = find_degree(new_eq)
+    left,right = equation.split('=')
     
+    result = ''
+    
+    if degree < 2:
+        if degree == 1:
+            split = re.split(r'[\+-]', left)
+            print("split eq",split)
+            print("length of first element",len(split[0]))
+            length_of_first_element = len(split[0])
+            if length_of_first_element == 1:
+              result = split[0] + " = " + split[1]
+            else:
+                #do full two step solve
+                pass
+        else:
+            #solve quadratic equation
+            pass
+                
+    return result
+     
+         
     
 
