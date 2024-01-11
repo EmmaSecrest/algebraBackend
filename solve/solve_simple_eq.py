@@ -30,26 +30,27 @@ def solve_simple_eq(equation):
     left,right = new_eq.split('=')
     
     result = []
-    
-    if degree < 2:
-        if degree == 1:
-            split = re.split(r'[\+-]', left)
-            print("split eq",split)
-            print("length of first element",len(split[0]))
-            length_of_first_element = len(split[0].replace(" ", ""))
-            if length_of_first_element == 1:
-                opposite = - int(split[1])
-                solution =  split[0] + "= " + split[1].replace(" ", "")
-                result = ["adding " + str(opposite) + " to both sides of the equation" ,solution]
-            if length_of_first_element > 1:
-                print("split[1]",split[1])
-                #opposite = - int(split[1])
-                split_first_part = split[0].split("*")
-                print("split first part",split_first_part)
-               
-        else:
-            #solve quadratic equation
-            pass
+    if degree == 1:
+        split = re.split(r'[\+-]', left)
+        print("split eq",split)
+        print("length of first element",len(split[0]))
+        length_of_first_element = len(split[0].replace(" ", ""))
+        if length_of_first_element == 1:
+            opposite = - int(split[1])
+            solution =  split[0] + "= " + split[1].replace(" ", "")
+            result = ["adding " + str(opposite) + " to both sides of the equation" ,solution]
+        if length_of_first_element > 1:
+            
+            opposite = - int(split[1])
+            split_first_part = split[0].split("*")
+            variable = split_first_part[1].replace(" ", "")
+            coefficient = split_first_part[0].replace(" ", "")
+            final = int(opposite / int(coefficient)) if opposite % int(coefficient) == 0 else opposite / int(coefficient)
+            result_pt1 = "moving " + str(opposite) + " to the left side of the equation"
+            result_pt2 = "adding " + str(opposite) + " from both sides"
+            result_pt3 = "dividing each side by " + str(coefficient)
+            result_pt4 = variable + " = " + str(final) 
+            result = [result_pt1,result_pt2,result_pt3,result_pt4]
                 
     return result
      
