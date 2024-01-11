@@ -27,7 +27,7 @@ def solve_simple_eq(equation):
     #determine the degree of the equation
     print("new_eq",new_eq)
     degree = find_degree(new_eq)
-    left,right = equation.split('=')
+    left,right = new_eq.split('=')
     
     result = []
     
@@ -36,13 +36,17 @@ def solve_simple_eq(equation):
             split = re.split(r'[\+-]', left)
             print("split eq",split)
             print("length of first element",len(split[0]))
-            length_of_first_element = len(split[0])
+            length_of_first_element = len(split[0].replace(" ", ""))
             if length_of_first_element == 1:
                 opposite = - int(split[1])
-                result = ["adding " + str(opposite) + " to both sides of the equation" , split[0] + " = " + split[1]]
+                solution =  split[0] + "= " + split[1].replace(" ", "")
+                result = ["adding " + str(opposite) + " to both sides of the equation" ,solution]
             if length_of_first_element > 1:
-                print("new_eq",new_eq)
-                
+                print("split[1]",split[1])
+                #opposite = - int(split[1])
+                split_first_part = split[0].split("*")
+                print("split first part",split_first_part)
+               
         else:
             #solve quadratic equation
             pass
