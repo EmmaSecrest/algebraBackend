@@ -2,16 +2,16 @@
 import unittest
 import sys
 sys.path.append('../solve')  
-from solve.solve_simple_eq import solve_linear_eq
-from solve.solve_simple_eq import set_up_to_solve
-from solve.solve_simple_eq import find_degree
-from solve.solve_simple_eq import find_symbol
+from solve.solve_linear_eq import solve_linear_y_intercept_eq
+from solve.solve_linear_eq import set_up_to_solve
+from solve.solve_linear_eq import find_degree
+from solve.solve_linear_eq import find_symbol
 
 class TestSolveSimpleEq(unittest.TestCase):
     def test_solve_simple_eq(self):
-        self.assertEqual(solve_linear_eq("x+1=2"),['adding -1 to both sides of the equation', 'x = 1'])
-        self.assertEqual(solve_linear_eq("2*x = -4"),[ "dividing each side of the equation by 2",'x = -2.0'])
-        self.assertEqual(solve_linear_eq("3*y + 6 = 12"), ['adding -6 to both sides of the equation', "dividing each side of the equation by 3", 'y = 2.0'])
+        self.assertEqual(solve_linear_y_intercept_eq("x+1=2"),['adding -1 to both sides of the equation', 'x = 1'])
+        self.assertEqual(solve_linear_y_intercept_eq("2*x = -4"),[ "dividing each side of the equation by 2",'x = -2.0'])
+        self.assertEqual(solve_linear_y_intercept_eq("3*y + 6 = 12"), ['adding -6 to both sides of the equation', "dividing each side of the equation by 3", 'y = 2.0'])
         
 class TestFindSymbol(unittest.TestCase):
     def test_find_symbol(self):

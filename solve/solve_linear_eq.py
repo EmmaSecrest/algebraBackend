@@ -31,7 +31,7 @@ def find_degree(equation, symbol):
     
 
 
-def solve_linear_eq(equation):
+def solve_linear_y_intercept_eq(equation):
     new_eq = set_up_to_solve(equation)
     #determine the degree of the equation
     left,right = new_eq.split('=')
