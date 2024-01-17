@@ -3,7 +3,6 @@ import re
 
 def distribute_negation(expression):
     terms = re.split(" ",expression)
-    print("length of terms is ", len(terms))
     if len(terms) >1:
         for index, term in enumerate(terms):
             if index != 0 and term.startswith('-'):
@@ -31,9 +30,7 @@ def set_up_to_solve_quadratic(equation):
     # Distribute the negation across the right side
     right = distribute_negation(right)
     result = left + right
-    print("result before simplify polynomial", result)
     result = simplify_polynomials(result)
-    print("result", result)
     result = result + " = 0"
     return result
 
