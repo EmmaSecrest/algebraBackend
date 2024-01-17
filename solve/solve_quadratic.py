@@ -3,16 +3,24 @@ import re
 
 def distribute_negation(expression):
     terms = re.split(" ",expression)
-    print("terms", terms)
-    for index, term in enumerate(terms):
-        if index != 0 and term.startswith('-'):
-            terms[index] = term.replace('-', '+')
-        elif index != 0 and term.startswith('+'):
-            terms[index] = term.replace('+', '-')
-        elif index == 0 and not term.startswith('-'):
-            terms[index] = '-' + term
-        elif index == 0 and term.startswith('-'):
-            terms[index] = term.replace('-', '')
+    print("length of terms is ", len(terms))
+    if len(terms) >1:
+        for index, term in enumerate(terms):
+            if index != 0 and term.startswith('-'):
+                terms[index] = term.replace('-', '+')
+            elif index != 0 and term.startswith('+'):
+                terms[index] = term.replace('+', '-')
+            elif index == 0 and not term.startswith('-'):
+                terms[index] = '-' + term
+            elif index == 0 and term.startswith('-'):
+                terms[index] = term.replace('-', '')
+    else:
+        if terms[0].startswith('-'):
+            terms[0] = terms[0].replace('-', '+')
+        else:
+            terms[0] = '-' + terms[0]
+    
+    
     result = ''.join(terms)
     return result
 
@@ -23,7 +31,9 @@ def set_up_to_solve_quadratic(equation):
     # Distribute the negation across the right side
     right = distribute_negation(right)
     result = left + right
+    print("result before simplify polynomial", result)
     result = simplify_polynomials(result)
+    print("result", result)
     result = result + " = 0"
     return result
 

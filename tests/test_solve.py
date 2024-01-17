@@ -46,11 +46,11 @@ class SolveQuadraticNoFactor(unittest.TestCase):
         self.assertEqual(solve_quad_no_factor("3*x**2 - 6*x + 7 = 0"), ["Use quadratic equation with a = 3, b = -6, and c = 7", ['No real solutions']])
         self.assertEqual(solve_quad_no_factor("2*x**2 + 4*x + 1 = 0"), ["Use quadratic equation with a = 2, b = 4, and c = 1", ['x = -0.5']])
 
-# class TestSetUpToSolveQuadratic(unittest.TestCase):
-#     def test_set_up_to_solve_quadratic(self):
-#         self.assertEqual(set_up_to_solve_quadratic("x**2 + 3*x+ 2 = 0"), "x**2 + 3*x + 2 = 0")
-#         self.assertEqual(set_up_to_solve_quadratic("x**2 + 3*x + 2 = -1"), "x**2 + 3*x + 3 = 0")
-#         self.assertEqual(set_up_to_solve_quadratic("3*x**2 + 4*x + 5 = x**2 - 2*x + 1"), "2*x**2 + 6*x + 4 = 0")
+class TestSetUpToSolveQuadratic(unittest.TestCase):
+    def test_set_up_to_solve_quadratic(self):
+        self.assertEqual(set_up_to_solve_quadratic("x**2 + 3*x+ 2 = 0"), "x**2 + 3*x + 2 = 0")
+        self.assertEqual(set_up_to_solve_quadratic("x**2 + 3*x + 2 = -1"), "x**2 + 3*x + 3 = 0")
+        self.assertEqual(set_up_to_solve_quadratic("3*x**2 + 4*x + 5 = x**2 - 2*x + 1"), "2*x**2 + 6*x + 4 = 0")
 
 class TestDistributeNegation(unittest.TestCase):
     def test_distribute_negation(self):
