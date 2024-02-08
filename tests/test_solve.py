@@ -9,6 +9,7 @@ from solve.solve_linear_eq import find_symbol
 from solve.solve_quadratic import solve_quad_no_factor
 from solve.solve_quadratic import set_up_to_solve_quadratic
 from solve.solve_quadratic import distribute_negation
+from solve.solve_quadratic import splitting_terms
 
 class TestSolveLinearYIntercept(unittest.TestCase):
     def solve_linear_y_intercept_eq(self):
@@ -42,9 +43,11 @@ class TestHighestDegree(unittest.TestCase):
 
 class SolveQuadraticNoFactor(unittest.TestCase):
     def test_quadratic_no_factor(self):
-        self.assertEqual(solve_quad_no_factor("x**2 + 5*x + 6 = 0"),[  "Use quadratic equation with a = 1, b = 2 and c = 5",['x = -3', 'x = -2']])
-        self.assertEqual(solve_quad_no_factor("3*x**2 - 6*x + 7 = 0"), ["Use quadratic equation with a = 3, b = -6, and c = 7", ['No real solutions']])
-        self.assertEqual(solve_quad_no_factor("2*x**2 + 4*x + 1 = 0"), ["Use quadratic equation with a = 2, b = 4, and c = 1", ['x = -0.5']])
+        self.assertEqual(solve_quad_no_factor("x**2 + 5*x + 6 = 0"),[  "Use quadratic equation with a = 1, b = 5 and c = 6",['x = -2', 'x = -3']])
+        self.assertEqual(solve_quad_no_factor("3*x**2 - 6*x + 7 = 0"), ["Use quadratic equation with a = 3, b = -6 and c = 7", 'No real solutions'])
+        self.assertEqual(solve_quad_no_factor("2*x**2 + 4*x + 1 = 0"), ["Use quadratic equation with a = 2, b = 4 and c = 1", ['x = -0.29', 'x = -1.71']])
+        self.assertEqual(solve_quad_no_factor("x**2 + x + 1 = 0"), ["Use quadratic equation with a = 1, b = 1 and c = 1", 'No real solutions'])
+        self.assertEqual(solve_quad_no_factor("x**2 - 5 = 0"), ["Use quadratic equation with a = 1, b = 0 and c = -5", ['x = 2.24', 'x = -2.24']])
 
 class TestSetUpToSolveQuadratic(unittest.TestCase):
     def test_set_up_to_solve_quadratic(self):
@@ -58,6 +61,14 @@ class TestDistributeNegation(unittest.TestCase):
         self.assertEqual(distribute_negation("x -2"), "-x+2")
         self.assertEqual(distribute_negation("-x +2"), "x-2")
         self.assertEqual(distribute_negation("-x -2"), "x+2")
+
+class TestSplittingTerms(unittest.TestCase):
+    def test_splitting_terms(self):
+        self.assertEqual(splitting_terms("x**2 + x + 1 = 0"), ['x**2', 'x', '1'])
+        self.assertEqual(splitting_terms("2*x**2 - 4*x + 1 = 0"), ['2*x**2', '-4*x', '1'])
+        self.assertEqual(splitting_terms("x**2 - x - 1 = 0"), ['x**2', '-x', '-1'])
+        self.assertEqual(splitting_terms("x**2 + x - 1 = 0"), ['x**2', 'x', '-1'])
+        self.assertEqual(splitting_terms("x**2 - x + 1 = 0"), ['x**2', '-x', '1'])
        
 
 
