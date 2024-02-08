@@ -101,6 +101,8 @@ def solve_quad_no_factor(equation):
     c = 0
     
     for term in terms:
+        
+        #finding the coefficient of a
         if "**2" in term:
             split = term.split("**")
             
@@ -112,13 +114,15 @@ def solve_quad_no_factor(equation):
                 a = 1    
             else:
                 print("split 0", split[0])
-        elif symbol in term and "*" in term and "**" not in term or term == symbol:
+        #finding the coefficient of b
+        elif symbol in term and "*" in term and "**2" not in term or term == symbol:
             if term == symbol:
                 b = 1
             else:
                 split = term.split("*")
                 b = int(split[0])
             
+        #finding the constant
         elif "**" not in term and "*" not in term and term != symbol:
             c = int(term)
             
