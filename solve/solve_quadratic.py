@@ -87,15 +87,7 @@ def quadratic_formula(a, b, c):
             return solutions
                 
        
-
-
-
-def solve_quad_no_factor(equation):
-    symbol = find_symbol(equation)
-    terms = splitting_terms(equation)
-    result = []
-    
-    
+def determine_coefficients(terms, symbol):
     a = 1
     b  = 0
     c = 0
@@ -125,6 +117,16 @@ def solve_quad_no_factor(equation):
         #finding the constant
         elif "**" not in term and "*" not in term and term != symbol:
             c = int(term)
+            
+    return [a, b, c]
+
+
+def solve_quad_no_factor(equation):
+    symbol = find_symbol(equation)
+    terms = splitting_terms(equation)
+    result = []
+    
+    a, b, c = determine_coefficients(terms, symbol)
             
     answer = quadratic_formula(a, b, c)
    
