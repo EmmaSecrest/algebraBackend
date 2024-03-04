@@ -10,6 +10,8 @@ from solve.solve_quadratic import solve_quad_no_factor
 from solve.solve_quadratic import set_up_to_solve_quadratic
 from solve.solve_quadratic import distribute_negation
 from solve.solve_quadratic import splitting_terms
+from solve.solve_quadratic import solve_quad_factor
+from solve.solve_quadratic import array_factors_coefficient
 
 class TestSolveLinearYIntercept(unittest.TestCase):
     def solve_linear_y_intercept_eq(self):
@@ -69,8 +71,22 @@ class TestSplittingTerms(unittest.TestCase):
         self.assertEqual(splitting_terms("x**2 - x - 1 = 0"), ['x**2', '-x', '-1'])
         self.assertEqual(splitting_terms("x**2 + x - 1 = 0"), ['x**2', 'x', '-1'])
         self.assertEqual(splitting_terms("x**2 - x + 1 = 0"), ['x**2', '-x', '1'])
-       
 
+class TestSolveQuadraticFactor(unittest.TestCase):
+    def test_solve_quad_factor(self):
+        self.assertEqual(solve_quad_factor("x**2 + 3*x + 2 = 0"), ['(x + 1)(x + 2) = 0', 'x = -1', 'x = -2'])
+        self.assertEqual(solve_quad_factor("2*x**2 + 5*x + 3 = 0"), ['(2x + 1)(x + 3) = 0', 'x = -1', 'x = -3'])
+        self.assertEqual(solve_quad_factor("-3*x**2 + 4*x - 1 = 0"), ['(-3x + 1)(x - 1) = 0', 'x = 1', 'x = 1/3'])
+        self.assertEqual(solve_quad_factor("x**2 - 2*x - 8 = 0"), ['(x - 4)(x + 2) = 0', 'x = 4', 'x = -2'])
+        self.assertEqual(solve_quad_factor("3*x**2 - 7*x + 2 = 0"), ['(3x - 1)(x - 2) = 0', 'x = 1', 'x = 2'])
+       
+class TestArrayFactorsCoefficient(unittest.TestCase):
+    def test_array_factors_coefficient(self):
+       self.assertEqual(array_factors_coefficient(6), [[1,6],[2,3],[3,2],[6,1]])
+       self.assertEqual(array_factors_coefficient(8),  [[1,8],[2,4],[4,2],[8,1]])
+       self.assertEqual(array_factors_coefficient(10), [[1,10],[2,5],[5,2],[10,1]])
+       self.assertEqual(array_factors_coefficient(12), [[1,12],[2,6],[3,4],[4,3],[6,2],[12,1]])   
+        
 
 if __name__ == '__main__':
     unittest.main()

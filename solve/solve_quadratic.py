@@ -136,7 +136,32 @@ def solve_quad_no_factor(equation):
     else:
         result.append([symbol + " = " + str(answer[0]), symbol + " = " + str(answer[1])])
     return result
+
+def array_factors_coefficient(x):
+    results = []
+    for i in range(1, x+1):
+        if x % i == 0:
+            results.append([i, int(x/i)])
             
+    return results
+
+
             
-            
+
+def solve_quad_factor(equation):
+    symbol = find_symbol(equation)
+    terms = splitting_terms(equation)
+    A, B, c = determine_coefficients(terms, symbol)      
     
+    factors_a = array_factors_coefficient(A)
+    factors_c = array_factors_coefficient(c)
+    a = 0
+    b = 0
+    d = 0
+    e = 0
+    
+     
+    # need to go through the factors of a and c to find the combination of factors that add up to b        
+    # after found the a = factor_a[x][0] , b = factor_a[x][1], d = factor_c[y][0], e = factor_c[y][1] where x and y are the indexes of the factors that work
+    # B = bd +ae
+               
