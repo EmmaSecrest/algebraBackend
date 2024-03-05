@@ -174,6 +174,8 @@ def solve_quad_factor(equation):
     e = 0
     result = []
     
+    
+    
     # need to go through the factors of A and c to find the combination of factors that add up to B        
     # after found the a = factor_a[x][0] , b = factor_a[x][1], d = factor_c[y][0], e = factor_c[y][1] where x and y are the indexes of the factors that work
     # B = bd +ae
@@ -182,36 +184,32 @@ def solve_quad_factor(equation):
     #f"({a}{symbol} + {d})({b}{symbol} + {e}) = 0"
     
     signs = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
-
+    
     for i in range(len(factors_a)):
         for j in range(len(factors_c)):
             for sign_a, sign_c in signs:
+                
                 if (sign_a * factors_a[i][0] * factors_c[j][1] + sign_c * factors_a[i][1] * factors_c[j][0]) == B:
                     a = factors_a[i][0]
                     b = factors_a[i][1]
-                    d = factors_c[j][0]
-                    e = factors_c[j][1]
+                    d = sign_a*factors_c[j][0]
+                    e = sign_c*factors_c[j][1]
+                    
                     break
-                elif (sign_a * factors_a[i][0] * factors_c[j][0] + sign_c * factors_a[i][1] * factors_c[j][1]) == B:
-                    a = factors_a[i][0]
-                    b = factors_a[i][1]
-                    d = factors_c[j][1]
-                    e = factors_c[j][0]
-                    break
+               
+                
 
 
 
     solutions = []
-    print("a", a, "b", b, "d", d, "e", e)
     
-   
     if a == 1 and b ==1:
         if d > 0 and e > 0:
             result.append(f"({symbol} + {d})({symbol} + {e}) = 0")
         if d < 0 and e < 0:
-            result.append(f"({symbol} - {abs(d)})({symbol} - {e}) = 0")
+            result.append(f"({symbol} - {abs(d)})({symbol} - {abs(e)}) = 0")
         if d > 0 and e < 0:
-            result.append(f"({symbol} + {d})({symbol} - {e}) = 0")
+            result.append(f"({symbol} + {d})({symbol} - {abs(e)}) = 0")
         if d < 0 and e > 0:
             result.append(f"({symbol} - {abs(d)})({symbol} + {e}) = 0")        
         
