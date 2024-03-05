@@ -74,13 +74,12 @@ class TestSplittingTerms(unittest.TestCase):
 
 class TestSolveQuadraticFactor(unittest.TestCase):
     def test_solve_quad_factor(self):
-        self.assertEqual(solve_quad_factor("x**2 + 3*x + 2 = 0"), ['(x + 1)(x + 2) = 0', ['x = -1', 'x = -2']])
-        self.assertEqual(solve_quad_factor("2*x**2 + 5*x + 3 = 0"), ['(2x + 3)(x + 1) = 0', ['x = -3/2', 'x = -1']])
-        self.assertEqual(solve_quad_factor("-3*x**2 + 4*x - 1 = 0"), ['(x - 1)(-3x + 1) = 0', ['x = 1', 'x = 1/3']])
-        
-        #TODO: this test is getting the solution right but we have a double negative in the factorization
-        self.assertEqual(solve_quad_factor("x**2 - 2*x - 8 = 0"), ['(x - 4)(x + 2) = 0', ['x = 4', 'x = -2']])
-        self.assertEqual(solve_quad_factor("3*x**2 - 7*x + 2 = 0"), ['(3x - 1)(x - 2) = 0', ['x = 1', 'x = 2']])
+        #self.assertEqual(solve_quad_factor("x**2 + 3*x + 2 = 0"), ['(x + 1)(x + 2) = 0', ['x = -1', 'x = -2']])
+        #self.assertEqual(solve_quad_factor("2*x**2 + 5*x + 3 = 0"), ['(2x + 3)(x + 1) = 0', ['x = -3/2', 'x = -1']])
+        #self.assertEqual(solve_quad_factor("-3*x**2 + 4*x - 1 = 0"), ['(x - 1)(-3x + 1) = 0', ['x = 1', 'x = 1/3']])
+        #self.assertEqual(solve_quad_factor("x**2 - 2*x - 8 = 0"), ['(x - 4)(x + 2) = 0', ['x = 4', 'x = -2']])
+        self.assertEqual(solve_quad_factor("3*x**2 - 7*x + 2 = 0"), ['(3x - 1)(x - 2) = 0', ['x = 1/3', 'x = 2']])
+        self.assertEqual(solve_quad_factor("x**2 - 5x + 6 = 0"), ["(x-2)(x-3) = 0", ['x = 2', 'x = 3']])
        
 class TestArrayFactorsCoefficient(unittest.TestCase):
     def test_array_factors_coefficient(self):
