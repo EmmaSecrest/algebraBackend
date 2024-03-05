@@ -174,10 +174,6 @@ def solve_quad_factor(equation):
     e = 0
     result = []
     
-    print("factors of a are: " , factors_a)
-    print("factors of c are: ", factors_c)
-    
-     
     # need to go through the factors of a and c to find the combination of factors that add up to b        
     # after found the a = factor_a[x][0] , b = factor_a[x][1], d = factor_c[y][0], e = factor_c[y][1] where x and y are the indexes of the factors that work
     # B = bd +ae
