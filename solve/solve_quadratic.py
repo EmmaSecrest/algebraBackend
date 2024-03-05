@@ -178,10 +178,7 @@ def solve_quad_factor(equation):
     # after found the a = factor_a[x][0] , b = factor_a[x][1], d = factor_c[y][0], e = factor_c[y][1] where x and y are the indexes of the factors that work
     # B = bd +ae
     
-    #todo: not working with negative numbers
-    signs = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
-    sign_a = sign_c = 1
-
+    #todo: not working when a negative number is the x coefficient
     #f"({a}{symbol} + {d})({b}{symbol} + {e}) = 0"
     
     signs = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
