@@ -139,9 +139,22 @@ def solve_quad_no_factor(equation):
 
 def array_factors_coefficient(x):
     results = []
-    for i in range(1, x+1):
-        if x % i == 0:
-            results.append([i, int(x/i)])
+    if x > 0:
+        for i in range(1, x+1):
+            if x % i == 0:
+                results.append([i, int(x/i)])
+    if x < 0:            
+        for i in range(x+1, 0):
+            if x % i == 0:
+                results.append([i, int(x/i)])
+        for i in range(1, -(x+1)):
+            if x % i == 0:
+                results.append([i, int(x/i)])
+    if x == 1:
+        results.append([1,1])
+    if x == -1:
+        results.append([1,-1])
+        results.append([-1,1])         
             
     return results
 
@@ -159,9 +172,134 @@ def solve_quad_factor(equation):
     b = 0
     d = 0
     e = 0
+    result = []
+    
+    print("factors of a are: " , factors_a)
+    print("factors of c are: ", factors_c)
     
      
     # need to go through the factors of a and c to find the combination of factors that add up to b        
     # after found the a = factor_a[x][0] , b = factor_a[x][1], d = factor_c[y][0], e = factor_c[y][1] where x and y are the indexes of the factors that work
     # B = bd +ae
-               
+    for i in range(len(factors_a)):
+        for j in range(len(factors_c)):
+            if factors_a[i][0] * factors_c[j][1] + factors_a[i][1] * factors_c[j][0] == B:
+                a = factors_a[i][0]
+                b = factors_a[i][1]
+                d = factors_c[j][0]
+                e = factors_c[j][1]
+                break
+
+    solutions = []
+    # result.append(f"({a}{symbol} + {d})({b}{symbol} + {e}) = 0")
+   
+    if a == 1 and b ==1:
+        if d > 0 and e > 0:
+            result.append(f"({symbol} + {d})({symbol} + {e}) = 0")
+        if d < 0 and e < 0:
+            result.append(f"({symbol} - {d})({symbol} - {e}) = 0")
+        if d > 0 and e < 0:
+            result.append(f"({symbol} + {d})({symbol} - {e}) = 0")
+        if d < 0 and e > 0:
+            result.append(f"({symbol} - {d})({symbol} + {e}) = 0")        
+        
+        
+        if d>0:
+          solutions.append(f"{symbol} = -{d}")
+        elif d<0:
+          solutions.append(f"{symbol} = {abs(d)}")
+        if e>0:
+            solutions.append(f"{symbol} = -{e}")
+        elif e<0:
+            solutions.append(f"{symbol} = {abs(e)}")
+        
+        result.append(solutions)  
+    
+    
+    elif a == 1:
+        
+        if d > 0 and e > 0:
+            result.append(f"({symbol} + {d})({b}{symbol} + {e}) = 0")
+        elif e < 0 and d < 0:
+            result.append(f"({symbol} - {abs(d)})({b}{symbol} - {abs(e)}) = 0")
+        elif d > 0 and e < 0:
+            result.append(f"({symbol} + {abs(d)})({b}{symbol} - {abs(e)}) = 0")
+        elif e > 0 and d < 0:
+            result.append(f"({symbol} - {abs(d)})({b}{symbol} + {abs(e)}) = 0")
+        
+        if d>0:
+          solutions.append(f"{symbol} = -{d}")
+        elif d<0:
+          solutions.append(f"{symbol} = {abs(d)}")
+          
+        if b > 0 and e > 0:
+            solutions.append(f'{symbol} = -{e}/{b}')
+        elif e < 0 and b < 0:
+            solutions.append(f'{symbol} = -{e}/{b}')
+        elif b > 0 and e < 0:
+            solutions.append(f'{symbol} = {abs(e)}/{abs(b)}')
+        elif b < 0 and e > 0:
+            solutions.append(f'{symbol} = {abs(e)}/{abs(b)}')
+        
+        result.append(solutions)     
+        
+    elif b == 1:
+        
+        if d > 0 and e > 0:
+            result.append(f"({a}{symbol} + {d})({symbol} + {e}) = 0")
+        elif e < 0 and d < 0:
+            result.append(f"({a}{symbol} - {abs(d)})({symbol} - {abs(e)}) = 0")
+        elif d > 0 and e < 0:
+            result.append(f"({a}{symbol} + {abs(d)})({symbol} - {abs(e)}) = 0")
+        elif e < 0 and d > 0:
+            result.append(f"({a}{symbol} - {abs(d)})({symbol} + {abs(e)}) = 0")
+        
+        if d > 0 and a > 0:
+            solutions.append(f'{symbol} = -{d}/{a}')
+        elif d < 0 and a < 0:
+            solutions.append(f'{symbol} = -{d}/{a}')
+        elif d > 0 and a < 0:
+            solutions.append(f'{symbol} = {abs(d)}/{abs(a)}')
+        elif d < 0 and a > 0:
+            solutions.append(f'{symbol} = {abs(d)}/{abs(a)}')    
+            
+        if e > 0:
+            solutions.append(f"{symbol} = -{e}")
+        elif e < 0:
+            solutions.append(f"{symbol} = {abs(e)}")
+        
+        result.append(solutions)        
+    
+    else:
+        
+        if d > 0 and e > 0:
+            result.append(f"({a}{symbol} + {d})({b}{symbol} + {e}) = 0")
+        elif e < 0 and d < 0:
+            result.append(f"({a}{symbol} - {abs(d)})({b}{symbol} - {abs(e)}) = 0")
+        elif d > 0 and e < 0:
+            result.append(f"({a}{symbol} + {abs(d)})({b}{symbol} - {abs(e)}) = 0")
+        elif d < 0 and e > 0:
+            result.append(f"({a}{symbol} - {abs(d)})({b}{symbol} + {abs(e)}) = 0")
+        
+        if d > 0 and a > 0:
+            solutions.append(f'{symbol} = -{d}/{a}')
+        elif d < 0 and a < 0:
+            solutions.append(f'{symbol} = -{d}/{a}')
+        elif d > 0 and a < 0:
+            solutions.append(f'{symbol} = {abs(d)}/{abs(a)}')
+        elif d < 0 and a > 0:
+            solutions.append(f'{symbol} = {abs(d)}/{abs(a)}')
+            
+        if b > 0 and e > 0:
+            solutions.append(f'{symbol} = -{e}/{b}')
+        elif e < 0 and b < 0:
+            solutions.append(f'{symbol} = -{e}/{b}')
+        elif b > 0 and e < 0:
+            solutions.append(f'{symbol} = {abs(e)}/{abs(b)}')
+        elif b < 0 and e > 0:
+            solutions.append(f'{symbol} = {abs(e)}/{abs(b)}')
+            
+        result.append(solutions) 
+    
+    return result
+        
