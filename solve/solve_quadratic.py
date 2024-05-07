@@ -1,6 +1,7 @@
 from simplify.simplify_expression import simplify_polynomials
 import re
 import math
+from solve.solve_linear_eq import solve_linear_y_intercept_eq
 
 def distribute_negation(expression):
     split = re.split(" ",expression)
@@ -173,15 +174,28 @@ def solve_quad_factor(equation):
     d = 0
     e = 0
     result = []
+    solutions = []
     
     
-    
-    # need to go through the factors of A and c to find the combination of factors that add up to B        
-    # after found the a = factor_a[x][0] , b = factor_a[x][1], d = factor_c[y][0], e = factor_c[y][1] where x and y are the indexes of the factors that work
-    # B = bd +ae
-    
-    #todo: not working when a negative number is the x coefficient
-    #f"({a}{symbol} + {d})({b}{symbol} + {e}) = 0"
+    if c == 0:
+        solutions.append(f"{symbol} = 0")
+        
+        if B < 0 and A != 1:
+            new_equation_left = f"{A}{symbol} - {abs(B)}"
+        elif A == 1 and B > 0:
+            new_equation_left= f"{symbol} + {B}"
+        elif A == 1 and B < 0:
+            new_equation_left = f"{symbol} - {abs(B)}"
+        else:
+            new_equation_left = f"{A}{symbol} + {B}" 
+        
+        new_equation = new_equation_left + " = 0"
+        result.append(f'x({new_equation_left}) = 0')
+        second_solution = solve_linear_y_intercept_eq(new_equation)[-1]
+        print("solve linear eq: " ,solve_linear_y_intercept_eq(new_equation))
+        solutions.append(second_solution)
+        
+
     
     signs = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
     
@@ -201,7 +215,7 @@ def solve_quad_factor(equation):
 
 
 
-    solutions = []
+    
     
     if a == 1 and b ==1:
         if d > 0 and e > 0:
@@ -223,7 +237,7 @@ def solve_quad_factor(equation):
         elif e<0:
             solutions.append(f"{symbol} = {abs(e)}")
         
-        result.append(solutions)  
+        
     
     
     elif a == 1:
@@ -251,7 +265,7 @@ def solve_quad_factor(equation):
         elif b < 0 and e > 0:
             solutions.append(f'{symbol} = {abs(e)}/{abs(b)}')
         
-        result.append(solutions)     
+            
         
     elif b == 1:
         
@@ -278,7 +292,7 @@ def solve_quad_factor(equation):
         elif e < 0:
             solutions.append(f"{symbol} = {abs(e)}")
         
-        result.append(solutions)        
+              
     
     else:
         
@@ -309,7 +323,7 @@ def solve_quad_factor(equation):
         elif b < 0 and e > 0:
             solutions.append(f'{symbol} = {abs(e)}/{abs(b)}')
             
-        result.append(solutions) 
+    result.append(solutions) 
     
     return result
         
