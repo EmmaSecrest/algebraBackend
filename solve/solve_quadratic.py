@@ -236,7 +236,7 @@ def solve_quad_factor(equation):
                         e = sign_c * factors_c[j][1]
                         break
                     
-        
+        # the factored out equation will look like this when it is returned (ax + d)(bx + e) = 0
         equation, solutions = generate_equation_and_solution(a, b, d, e, symbol)
         result.append(equation)
         result.append(solutions)
