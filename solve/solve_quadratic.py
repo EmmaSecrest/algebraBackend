@@ -183,14 +183,12 @@ def solve_quad_factor(equation):
     if c == 0:
         solutions.append(f"{symbol} = 0")
 
-        if B < 0 and A != 1:
-            new_equation_left = f"{A}{symbol} - {abs(B)}"
-        elif A == 1 and B > 0:
-            new_equation_left = f"{symbol} + {B}"
-        elif A == 1 and B < 0:
-            new_equation_left = f"{symbol} - {abs(B)}"
+        sign = '-' if B < 0 else '+'
+        B_abs = abs(B)
+        if A == 1:
+            new_equation_left = f"{symbol} {sign} {B_abs}"
         else:
-            new_equation_left = f"{A}{symbol} + {B}"
+            new_equation_left = f"{A}{symbol} {sign} {B_abs}"
 
         new_equation = new_equation_left + " = 0"
         result.append(f'x({new_equation_left}) = 0')
