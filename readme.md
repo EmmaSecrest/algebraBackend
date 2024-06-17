@@ -6,7 +6,7 @@ This project is a versatile algebraic calculator capable of solving equations of
 
 ## Progress
 
-This project is in project and is not yet complete. Right now the program can handle functions in the form of *y = mx + b* or *ax^2 + bx + c = 0*. My next step is to handle the cases where b is 0 or c is 0. From there I plan to expand to higher level functions.
+This project is in project and is not yet complete. Right now the program can handle functions in the form of *y = mx + b* or *ax^2 + bx + c = 0*. My next step is to handle higher level functions.
 
 ## Testing
 

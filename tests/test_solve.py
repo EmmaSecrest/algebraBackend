@@ -96,13 +96,13 @@ class TestSolveQuadraticFactor(unittest.TestCase):
         
         
        
-# class TestArrayFactorsCoefficient(unittest.TestCase):
-#     def test_array_factors_coefficient(self):
-#        self.assertEqual(array_factors_coefficient(6), [[1,6],[2,3],[3,2],[6,1]])
-#        self.assertEqual(array_factors_coefficient(8),  [[1,8],[2,4],[4,2],[8,1]])
-#        self.assertEqual(array_factors_coefficient(10), [[1,10],[2,5],[5,2],[10,1]])
-#        self.assertEqual(array_factors_coefficient(12), [[1,12],[2,6],[3,4],[4,3],[6,2],[12,1]])
-#        self.assertEqual(array_factors_coefficient(-6), [[-3, 2], [-2, 3], [-1, 6], [1, -6], [2, -3], [3, -2]])   
+class TestArrayFactorsCoefficient(unittest.TestCase):
+    def test_array_factors_coefficient(self):
+       self.assertEqual(array_factors_coefficient(6), [[1,6],[2,3],[3,2],[6,1]])
+       self.assertEqual(array_factors_coefficient(8),  [[1,8],[2,4],[4,2],[8,1]])
+       self.assertEqual(array_factors_coefficient(10), [[1,10],[2,5],[5,2],[10,1]])
+       self.assertEqual(array_factors_coefficient(12), [[1,12],[2,6],[3,4],[4,3],[6,2],[12,1]])
+       self.assertEqual(array_factors_coefficient(-6), [[-3, 2], [-2, 3], [-1, 6], [1, -6], [2, -3], [3, -2]])   
         
 
 if __name__ == '__main__':
