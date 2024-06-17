@@ -29,21 +29,35 @@ def find_degree(equation, symbol):
     return highest_degree
    
     
-
+#todo: rework this to handle a negative constant
 
 def solve_linear_y_intercept_eq(equation):
     new_eq = set_up_to_solve(equation)
+    print("new equation in solve linear y intercept eq", new_eq)
     #determine the degree of the equation
     left,right = new_eq.split('=')
     
     result = []
-    split = re.split(r'[\+-]', left)
+    
+    if " - " in left:
+        left = left.replace(" - ", " + -")
+    print("left", left)
+    
+    split = left.split("+")
+    print("split", split)
+    
+    
+    
     length_of_first_element = len(split[0].replace(" ", ""))
+    
+    #if the first element has no coefficient
     if length_of_first_element == 1:
         number_to_add = - int(split[1])
         answer = int(right)+number_to_add
         solution =  split[0] + "= " + str(answer)
         result = ["adding " + str(number_to_add) + " to both sides of the equation" ,solution]
+    
+    #if the first element has a coefficient
     if length_of_first_element > 1:
         split_first_element = re.split(r'[\*]', split[0])
         coefficient = int(split_first_element[0].replace(" ", ""))            

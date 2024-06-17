@@ -190,14 +190,26 @@ def solve_quad_factor(equation):
             new_equation_left = f"{A}{symbol} + {B}" 
         
         new_equation = new_equation_left + " = 0"
+        print("new equation: ", new_equation)
         result.append(f'x({new_equation_left}) = 0')
         second_solution = solve_linear_y_intercept_eq(new_equation)[-1]
         print("solve linear eq: " ,solve_linear_y_intercept_eq(new_equation))
         solutions.append(second_solution)
         
 
+    """ 
+    Part below is calculating the right combination for the the Factors of A and the factors of C that will be added up to get B 
+    a normal factored out equation looks like this: (ax + b)(dx - e)
+    so we need a*d = A or the coefficient of x^2
+    and we need b*e = C or the constant
+    but we also need b*d + a*c = B which is the coefficient to the middle term
+    
+    And we also need to take into consideration what is negative and what is positive to be sure we are producing the correct results
+    """
+    
     
     signs = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+    
     
     for i in range(len(factors_a)):
         for j in range(len(factors_c)):
@@ -212,11 +224,7 @@ def solve_quad_factor(equation):
                     break
                
                 
-
-
-
-    
-    
+  
     if a == 1 and b ==1:
         if d > 0 and e > 0:
             result.append(f"({symbol} + {d})({symbol} + {e}) = 0")
