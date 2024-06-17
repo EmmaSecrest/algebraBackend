@@ -159,14 +159,18 @@ def array_factors_coefficient(x):
             
     return results
 
-
+def generate_equation_and_solution(a, b, d, e, symbol):
+    equation = f"({a if a != 1 else ''}{symbol if a != 0 else ''} {'+' if d >= 0 else '-'} {abs(d)})({b if b != 1 else ''}{symbol if b != 0 else ''} {'+' if e >= 0 else '-'} {abs(e)}) = 0"
+    solution_d = f"{symbol} = {'-' if d >= 0 and a >= 0 else ''}{abs(d)}{f'/{abs(a)}' if a != 1 and a != 0 else ''}"
+    solution_e = f"{symbol} = {'-' if e >= 0 and b >= 0 else ''}{abs(e)}{f'/{abs(b)}' if b != 1 and b != 0 else ''}"
+    return equation, solution_d, solution_e
             
 
 def solve_quad_factor(equation):
     symbol = find_symbol(equation)
     terms = splitting_terms(equation)
-    A, B, c = determine_coefficients(terms, symbol)      
-    
+    A, B, c = determine_coefficients(terms, symbol)
+
     factors_a = array_factors_coefficient(A)
     factors_c = array_factors_coefficient(c)
     a = 0
@@ -175,163 +179,51 @@ def solve_quad_factor(equation):
     e = 0
     result = []
     solutions = []
-    
-    
+
     if c == 0:
         solutions.append(f"{symbol} = 0")
-        
+
         if B < 0 and A != 1:
             new_equation_left = f"{A}{symbol} - {abs(B)}"
         elif A == 1 and B > 0:
-            new_equation_left= f"{symbol} + {B}"
+            new_equation_left = f"{symbol} + {B}"
         elif A == 1 and B < 0:
             new_equation_left = f"{symbol} - {abs(B)}"
         else:
-            new_equation_left = f"{A}{symbol} + {B}" 
-        
+            new_equation_left = f"{A}{symbol} + {B}"
+
         new_equation = new_equation_left + " = 0"
-        print("new equation: ", new_equation)
         result.append(f'x({new_equation_left}) = 0')
         second_solution = solve_linear_y_intercept_eq(new_equation)[-1]
-        print("solve linear eq: " ,solve_linear_y_intercept_eq(new_equation))
         solutions.append(second_solution)
-        
+        result.append(solutions)
 
-    """ 
-    Part below is calculating the right combination for the the Factors of A and the factors of C that will be added up to get B 
-    a normal factored out equation looks like this: (ax + b)(dx - e)
-    so we need a*d = A or the coefficient of x^2
-    and we need b*e = C or the constant
-    but we also need b*d + a*c = B which is the coefficient to the middle term
-    
-    And we also need to take into consideration what is negative and what is positive to be sure we are producing the correct results
-    """
-    
-    
-    signs = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
-    
-    
-    for i in range(len(factors_a)):
-        for j in range(len(factors_c)):
-            for sign_a, sign_c in signs:
-                
-                if (sign_a * factors_a[i][0] * factors_c[j][1] + sign_c * factors_a[i][1] * factors_c[j][0]) == B:
-                    a = factors_a[i][0]
-                    b = factors_a[i][1]
-                    d = sign_a*factors_c[j][0]
-                    e = sign_c*factors_c[j][1]
-                    
-                    break
-               
-                
-  
-    if a == 1 and b ==1:
-        if d > 0 and e > 0:
-            result.append(f"({symbol} + {d})({symbol} + {e}) = 0")
-        if d < 0 and e < 0:
-            result.append(f"({symbol} - {abs(d)})({symbol} - {abs(e)}) = 0")
-        if d > 0 and e < 0:
-            result.append(f"({symbol} + {d})({symbol} - {abs(e)}) = 0")
-        if d < 0 and e > 0:
-            result.append(f"({symbol} - {abs(d)})({symbol} + {e}) = 0")        
-        
-        
-        if d>0:
-          solutions.append(f"{symbol} = -{d}")
-        elif d<0:
-          solutions.append(f"{symbol} = {abs(d)}")
-        if e>0:
-            solutions.append(f"{symbol} = -{e}")
-        elif e<0:
-            solutions.append(f"{symbol} = {abs(e)}")
-        
-        
-    
-    
-    elif a == 1:
-        
-        if d > 0 and e > 0:
-            result.append(f"({symbol} + {d})({b}{symbol} + {e}) = 0")
-        elif e < 0 and d < 0:
-            result.append(f"({symbol} - {abs(d)})({b}{symbol} - {abs(e)}) = 0")
-        elif d > 0 and e < 0:
-            result.append(f"({symbol} + {abs(d)})({b}{symbol} - {abs(e)}) = 0")
-        elif e > 0 and d < 0:
-            result.append(f"({symbol} - {abs(d)})({b}{symbol} + {abs(e)}) = 0")
-        
-        if d>0:
-          solutions.append(f"{symbol} = -{d}")
-        elif d<0:
-          solutions.append(f"{symbol} = {abs(d)}")
-          
-        if b > 0 and e > 0:
-            solutions.append(f'{symbol} = -{e}/{b}')
-        elif e < 0 and b < 0:
-            solutions.append(f'{symbol} = -{e}/{b}')
-        elif b > 0 and e < 0:
-            solutions.append(f'{symbol} = {abs(e)}/{abs(b)}')
-        elif b < 0 and e > 0:
-            solutions.append(f'{symbol} = {abs(e)}/{abs(b)}')
-        
-            
-        
-    elif b == 1:
-        
-        if d > 0 and e > 0:
-            result.append(f"({a}{symbol} + {d})({symbol} + {e}) = 0")
-        elif e < 0 and d < 0:
-            result.append(f"({a}{symbol} - {abs(d)})({symbol} - {abs(e)}) = 0")
-        elif d > 0 and e < 0:
-            result.append(f"({a}{symbol} + {abs(d)})({symbol} - {abs(e)}) = 0")
-        elif e < 0 and d > 0:
-            result.append(f"({a}{symbol} - {abs(d)})({symbol} + {abs(e)}) = 0")
-        
-        if d > 0 and a > 0:
-            solutions.append(f'{symbol} = -{d}/{a}')
-        elif d < 0 and a < 0:
-            solutions.append(f'{symbol} = -{d}/{a}')
-        elif d > 0 and a < 0:
-            solutions.append(f'{symbol} = {abs(d)}/{abs(a)}')
-        elif d < 0 and a > 0:
-            solutions.append(f'{symbol} = {abs(d)}/{abs(a)}')    
-            
-        if e > 0:
-            solutions.append(f"{symbol} = -{e}")
-        elif e < 0:
-            solutions.append(f"{symbol} = {abs(e)}")
-        
-              
-    
     else:
-        
-        if d > 0 and e > 0:
-            result.append(f"({a}{symbol} + {d})({b}{symbol} + {e}) = 0")
-        elif e < 0 and d < 0:
-            result.append(f"({a}{symbol} - {abs(d)})({b}{symbol} - {abs(e)}) = 0")
-        elif d > 0 and e < 0:
-            result.append(f"({a}{symbol} + {abs(d)})({b}{symbol} - {abs(e)}) = 0")
-        elif d < 0 and e > 0:
-            result.append(f"({a}{symbol} - {abs(d)})({b}{symbol} + {abs(e)}) = 0")
-        
-        if d > 0 and a > 0:
-            solutions.append(f'{symbol} = -{d}/{a}')
-        elif d < 0 and a < 0:
-            solutions.append(f'{symbol} = -{d}/{a}')
-        elif d > 0 and a < 0:
-            solutions.append(f'{symbol} = {abs(d)}/{abs(a)}')
-        elif d < 0 and a > 0:
-            solutions.append(f'{symbol} = {abs(d)}/{abs(a)}')
-            
-        if b > 0 and e > 0:
-            solutions.append(f'{symbol} = -{e}/{b}')
-        elif e < 0 and b < 0:
-            solutions.append(f'{symbol} = -{e}/{b}')
-        elif b > 0 and e < 0:
-            solutions.append(f'{symbol} = {abs(e)}/{abs(b)}')
-        elif b < 0 and e > 0:
-            solutions.append(f'{symbol} = {abs(e)}/{abs(b)}')
-            
-    result.append(solutions) 
-    
+        """
+        Part below is calculating the right combination for the Factors of A and the factors of C that will be added up to get B 
+        a normal factored out equation looks like this: (ax + b)(dx - e)
+        so we need a*d = A or the coefficient of x^2
+        and we need b*e = C or the constant
+        but we also need b*d + a*e = B which is the coefficient to the middle term
+
+        And we also need to take into consideration what is negative and what is positive to be sure we are producing the correct results
+        """
+        signs = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+
+        for i in range(len(factors_a)):
+            for j in range(len(factors_c)):
+                for sign_a, sign_c in signs:
+                    if (sign_a * factors_a[i][0] * factors_c[j][1] + sign_c * factors_a[i][1] * factors_c[j][0]) == B:
+                        a = factors_a[i][0]
+                        b = factors_a[i][1]
+                        d = sign_a * factors_c[j][0]
+                        e = sign_c * factors_c[j][1]
+                        break
+
+        equation, solution_d, solution_e = generate_equation_and_solution(a, b, d, e, symbol)
+        equation_and_solutions = [equation, [solution_d, solution_e]]
+        result.extend(equation_and_solutions)
+
     return result
+
         
