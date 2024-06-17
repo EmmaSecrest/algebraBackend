@@ -2,6 +2,7 @@ from simplify.simplify_expression import simplify_polynomials
 import re
 import math
 from solve.solve_linear_eq import solve_linear_y_intercept_eq
+from fractions import Fraction
 
 def distribute_negation(expression):
     split = re.split(" ",expression)
@@ -128,7 +129,6 @@ def solve_quad_no_factor(equation):
     result = []
     
     a, b, c = determine_coefficients(terms, symbol)
-            
     answer = quadratic_formula(a, b, c)
    
     result.append(f"Use quadratic equation with a = {a}, b = {b} and c = {c}")
@@ -159,11 +159,32 @@ def array_factors_coefficient(x):
             
     return results
 
+def format_solution(solution):
+    fraction = Fraction(solution).limit_denominator()
+    
+    if fraction.denominator == 1:
+        return str(fraction.numerator)
+    
+    return str(fraction)
+
 def generate_equation_and_solution(a, b, d, e, symbol):
-    equation = f"({a if a != 1 else ''}{symbol if a != 0 else ''} {'+' if d >= 0 else '-'} {abs(d)})({b if b != 1 else ''}{symbol if b != 0 else ''} {'+' if e >= 0 else '-'} {abs(e)}) = 0"
-    solution_d = f"{symbol} = {'-' if d >= 0 and a >= 0 else ''}{abs(d)}{f'/{abs(a)}' if a != 1 and a != 0 else ''}"
-    solution_e = f"{symbol} = {'-' if e >= 0 and b >= 0 else ''}{abs(e)}{f'/{abs(b)}' if b != 1 and b != 0 else ''}"
-    return equation, solution_d, solution_e
+    part1 = f"{a if a != 1 else ''}{symbol}" if a != 0 else ''
+    part2 = f" {'+' if d >= 0 else '-'} {abs(d)}" if d != 0 else ''
+    part3 = f"{b if b != 1 else ''}{symbol}" if b != 0 else ''
+    part4 = f" {'+' if e >= 0 else '-'} {abs(e)}" if e != 0 else ''
+    
+    if a == -1:
+        part1 = f"-{symbol}"
+    if b == -1:
+        part3 = f"-{symbol}"
+    
+    equation = f"({part1}{part2})({part3}{part4}) = 0"
+    solution_d = f"{symbol} = {format_solution(-d/a)}" if d != 0 else None
+    solution_e = f"{symbol} = {format_solution(-e/b)}" if e != 0 else None
+    solutions = [sol for sol in [solution_d, solution_e] if sol is not None]
+
+    return [equation, solutions]
+
             
 
 def solve_quad_factor(equation):
@@ -173,10 +194,7 @@ def solve_quad_factor(equation):
 
     factors_a = array_factors_coefficient(A)
     factors_c = array_factors_coefficient(c)
-    a = 0
-    b = 0
-    d = 0
-    e = 0
+    a, b, d, e = 0, 0, 0, 0
     result = []
     solutions = []
 
@@ -217,11 +235,10 @@ def solve_quad_factor(equation):
                         d = sign_a * factors_c[j][0]
                         e = sign_c * factors_c[j][1]
                         break
-
-        equation, solution_d, solution_e = generate_equation_and_solution(a, b, d, e, symbol)
-        equation_and_solutions = [equation, [solution_d, solution_e]]
-        result.extend(equation_and_solutions)
+                    
+        
+        equation, solutions = generate_equation_and_solution(a, b, d, e, symbol)
+        result.append(equation)
+        result.append(solutions)
 
     return result
-
-        

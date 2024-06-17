@@ -10,6 +10,7 @@ from solve.solve_quadratic import splitting_terms
 from solve.solve_quadratic import solve_quad_factor
 from solve.solve_quadratic import array_factors_coefficient
 from solve.solve_quadratic import determine_coefficients
+from solve.solve_quadratic import generate_equation_and_solution
 
 class TestDetermineCoefficients(unittest.TestCase):
     def test_determine_coefficients(self):
@@ -46,7 +47,13 @@ class TestSplittingTerms(unittest.TestCase):
         self.assertEqual(splitting_terms("x**2 - x - 1 = 0"), ['x**2', '-x', '-1'])
         self.assertEqual(splitting_terms("x**2 + x - 1 = 0"), ['x**2', 'x', '-1'])
         self.assertEqual(splitting_terms("x**2 - x + 1 = 0"), ['x**2', '-x', '1'])
-
+class TestGenerateEquationAndSolution(unittest.TestCase):
+    def test_generate_equation_and_solution(self):
+        self.assertEqual(generate_equation_and_solution(1,1,2,1,'x'),['(x + 2)(x + 1) = 0', ['x = -2', 'x = -1']])
+        self.assertEqual(generate_equation_and_solution(1,1,-2,-1,'x'),['(x - 2)(x - 1) = 0', ['x = 2', 'x = 1']])
+        self.assertEqual(generate_equation_and_solution(1,1,-2,1,'x'),['(x - 2)(x + 1) = 0', ['x = 2', 'x = -1']])
+        self.assertEqual(generate_equation_and_solution(-1,1,-2,-1,'x'),['(-x - 2)(x - 1) = 0', ['x = -2', 'x = 1']])
+        
 class TestSolveQuadraticFactor(unittest.TestCase):
     def test_solve_quad_factor(self):
         self.assertEqual(solve_quad_factor("x**2 + 3*x + 2 = 0"), ['(x + 2)(x + 1) = 0', ['x = -2', 'x = -1']])
