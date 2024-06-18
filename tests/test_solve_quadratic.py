@@ -1,25 +1,27 @@
 #to run tests use python -m unittest discover
-import unittest
-import sys
-sys.path.append('../solve')  
+from unittest import TestCase, main
 
-from solve.solve_quadratic import solve_quad_no_factor
-from solve.solve_quadratic import set_up_to_solve_quadratic
-from solve.solve_quadratic import distribute_negation
-from solve.solve_quadratic import splitting_terms
-from solve.solve_quadratic import solve_quad_factor
-from solve.solve_quadratic import array_factors_coefficient
-from solve.solve_quadratic import determine_coefficients
-from solve.solve_quadratic import generate_equation_and_solution
+from solve.solve_quadratic import (
+    solve_quad_no_factor,
+    set_up_to_solve_quadratic,
+    distribute_negation,
+    splitting_terms,
+    solve_quad_factor,
+    array_factors_coefficient,
+    determine_coefficients,
+    generate_equation_and_solution,
+)
 
-class TestDetermineCoefficients(unittest.TestCase):
+class TestDetermineCoefficients(TestCase):
     def test_determine_coefficients(self):
-        self.assertEqual(determine_coefficients(['x**2', '2*x', '3'], 'x'), [1, 2, 3])
-        self.assertEqual(determine_coefficients(['2*x**2', '3*x', '4'], 'x'), [2, 3, 4])
-        self.assertEqual(determine_coefficients(["x**2","2*x"],'x'), [1,2,0])
+        # De-duplicate repeated code by a lambda
+        local_test = lambda i, j: self.assertEqual(determine_coefficients(*i), j)
+        local_test((['x**2', '2*x', '3'], 'x'), [1, 2, 3])
+        local_test((['2*x**2', '3*x', '4'], 'x'), [2, 3, 4])
+        local_test((["x**2","2*x"],'x'), [1,2,0])
 
 
-class SolveQuadraticNoFactor(unittest.TestCase):
+class SolveQuadraticNoFactor(TestCase):
     def test_quadratic_no_factor(self):
         self.assertEqual(solve_quad_no_factor("x**2 + 5*x + 6 = 0"),[  "Use quadratic equation with a = 1, b = 5 and c = 6",['x = -2', 'x = -3']])
         self.assertEqual(solve_quad_no_factor("3*x**2 - 6*x + 7 = 0"), ["Use quadratic equation with a = 3, b = -6 and c = 7", 'No real solutions'])
@@ -27,34 +29,34 @@ class SolveQuadraticNoFactor(unittest.TestCase):
         self.assertEqual(solve_quad_no_factor("x**2 + x + 1 = 0"), ["Use quadratic equation with a = 1, b = 1 and c = 1", 'No real solutions'])
         self.assertEqual(solve_quad_no_factor("x**2 - 5 = 0"), ["Use quadratic equation with a = 1, b = 0 and c = -5", ['x = 2.24', 'x = -2.24']])
 
-class TestSetUpToSolveQuadratic(unittest.TestCase):
+class TestSetUpToSolveQuadratic(TestCase):
     def test_set_up_to_solve_quadratic(self):
         self.assertEqual(set_up_to_solve_quadratic("x**2 + 3*x+ 2 = 0"), "x**2 + 3*x + 2 = 0")
         self.assertEqual(set_up_to_solve_quadratic("x**2 + 3*x + 2 = -1"), "x**2 + 3*x + 3 = 0")
         self.assertEqual(set_up_to_solve_quadratic("3*x**2 + 4*x + 5 = x**2 - 2*x + 1"), "2*x**2 + 6*x + 4 = 0")
 
-class TestDistributeNegation(unittest.TestCase):
+class TestDistributeNegation(TestCase):
     def test_distribute_negation(self):
         self.assertEqual(distribute_negation("x +2"), "-x-2")
         self.assertEqual(distribute_negation("x -2"), "-x+2")
         self.assertEqual(distribute_negation("-x +2"), "x-2")
         self.assertEqual(distribute_negation("-x -2"), "x+2")
 
-class TestSplittingTerms(unittest.TestCase):
+class TestSplittingTerms(TestCase):
     def test_splitting_terms(self):
         self.assertEqual(splitting_terms("x**2 + x + 1 = 0"), ['x**2', 'x', '1'])
         self.assertEqual(splitting_terms("2*x**2 - 4*x + 1 = 0"), ['2*x**2', '-4*x', '1'])
         self.assertEqual(splitting_terms("x**2 - x - 1 = 0"), ['x**2', '-x', '-1'])
         self.assertEqual(splitting_terms("x**2 + x - 1 = 0"), ['x**2', 'x', '-1'])
         self.assertEqual(splitting_terms("x**2 - x + 1 = 0"), ['x**2', '-x', '1'])
-class TestGenerateEquationAndSolution(unittest.TestCase):
+class TestGenerateEquationAndSolution(TestCase):
     def test_generate_equation_and_solution(self):
         self.assertEqual(generate_equation_and_solution(1,1,2,1,'x'),['(x + 2)(x + 1) = 0', ['x = -2', 'x = -1']])
         self.assertEqual(generate_equation_and_solution(1,1,-2,-1,'x'),['(x - 2)(x - 1) = 0', ['x = 2', 'x = 1']])
         self.assertEqual(generate_equation_and_solution(1,1,-2,1,'x'),['(x - 2)(x + 1) = 0', ['x = 2', 'x = -1']])
         self.assertEqual(generate_equation_and_solution(-1,1,-2,-1,'x'),['(-x - 2)(x - 1) = 0', ['x = -2', 'x = 1']])
         
-class TestSolveQuadraticFactor(unittest.TestCase):
+class TestSolveQuadraticFactor(TestCase):
     def test_solve_quad_factor(self):
         self.assertEqual(solve_quad_factor("x**2 + 3*x + 2 = 0"), ['(x + 2)(x + 1) = 0', ['x = -2', 'x = -1']])
         self.assertEqual(solve_quad_factor("2*x**2 + 5*x + 3 = 0"), ['(2x + 3)(x + 1) = 0', ['x = -3/2', 'x = -1']])
@@ -69,7 +71,7 @@ class TestSolveQuadraticFactor(unittest.TestCase):
         
         
        
-class TestArrayFactorsCoefficient(unittest.TestCase):
+class TestArrayFactorsCoefficient(TestCase):
     def test_array_factors_coefficient(self):
        self.assertEqual(array_factors_coefficient(6), [[1,6],[2,3],[3,2],[6,1]])
        self.assertEqual(array_factors_coefficient(8),  [[1,8],[2,4],[4,2],[8,1]])
@@ -78,4 +80,4 @@ class TestArrayFactorsCoefficient(unittest.TestCase):
        self.assertEqual(array_factors_coefficient(-6), [[-3, 2], [-2, 3], [-1, 6], [1, -6], [2, -3], [3, -2]])   
 
 if __name__ == '__main__':
-    unittest.main()
+    main()
