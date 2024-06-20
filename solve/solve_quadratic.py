@@ -155,8 +155,8 @@ def array_factors_coefficient(x):
         results.append([1,1])
     if x == -1:
         results.append([1,-1])
-        results.append([-1,1])         
-            
+        results.append([-1,1])
+             
     return results
 
 def format_solution(solution):
