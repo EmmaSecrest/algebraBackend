@@ -20,13 +20,7 @@ def find_symbol(equation):
     return symbols[0] if symbols else None
 
 
-def find_degree(equation, symbol):
-    s = symbols(symbol)
-    left, right = equation.split('=')
-    left_side = sympify(left)
-    highest_degree = degree(left_side, gen=s)
-    
-    return highest_degree
+
    
 def solve_linear_y_intercept_eq(equation):
     new_eq = set_up_to_solve(equation)

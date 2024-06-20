@@ -1,6 +1,6 @@
 from unittest import TestCase, main
 
-from solve.solve_higher_order import (solve_synthetic_division,array_factors_coefficient_list)
+from solve.solve_higher_order import (solve_synthetic_division,array_factors_coefficient_list,find_degree)
 
 class TestDetermineSyntheticDivision(TestCase):
     def test_synthetic_division(self):
@@ -17,3 +17,15 @@ class TestArrayFactorsCoefficientList(TestCase):
         self.assertEqual(array_factors_coefficient_list(12), [-12, -6, -4, -3, -2, -1, 1, 2, 3, 4, 6, 12])
         self.assertEqual(array_factors_coefficient_list(-6), [-6, -3, -2, -1, 1, 2, 3, 6])
         self.assertEqual(array_factors_coefficient_list(5), [-5, -1, 1, 5])        
+
+class TestFindDegree(TestCase):
+    def test_find_degree(self):
+        self.assertEqual(find_degree("x**3 + 2*x**2 - 5*x - 6 = 0", "x"), 3)
+        self.assertEqual(find_degree("x**3 - 3*x**2 - 4*x + 12 = 0", "x"), 3)
+        self.assertEqual(find_degree("x**5 + x**4 - 15*x**3 - 25*x**2 + 14*x + 24 = 0", "x"), 5)
+        self.assertEqual(find_degree("x**2 + 3*x + 2 = 0", "x"), 2)
+        self.assertEqual(find_degree("x**2 - 2*x - 8 = 0", "x"), 2)
+        self.assertEqual(find_degree("x-4 = 0", "x"), 1 )
+        
+if __name__ == '__main__':
+    main()
