@@ -7,6 +7,6 @@ def array_factors_coefficient_list(x):
         if x % i == 0:
             results.add(i)
             results.add(-i)
-            results.add(x // i)
-            results.add(-x // i)
-    return list(results)
+            # results.add(x // i)
+            # results.add(-x // i)
+    return sorted(list(results))
