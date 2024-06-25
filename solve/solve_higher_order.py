@@ -75,19 +75,9 @@ def determine_coefficients_higher_order(equation,symbol):
             
 def put_second_order_back_together(coefficients, symbol):
     equation = ""
-    for key, value in coefficients.items():
-        if key == 1:
-            if value == 1:
-                equation += f"+ {symbol} "
-            elif value == -1:
-                equation += f"- {symbol} "
-            else:
-                if value < 0:
-                    equation += f"- {abs(value)}*{symbol} "
-        elif key == 0:
-            if value == 0:
-                equation += f"= 0"
-            elif value < 0:
+    for key, value in sorted(coefficients.items(), reverse=True):
+        if key == 0:
+            if value < 0:
                 equation += f"- {abs(value)} = 0"
             else:
                 equation += f"+ {value} = 0"
@@ -95,20 +85,24 @@ def put_second_order_back_together(coefficients, symbol):
         elif key == 2:
             if value == 1:
                 equation += f"{symbol}**2 " 
-            if value == -1:
+            elif value == -1:
                 equation += f"- {symbol}**2 "
             else:
                 equation += f"{value}*{symbol}**2 "
         
-        else:
+        else:  # key == 1
             if value == 0:
-               pass
+                continue
+            elif value == 1:
+                equation += f"+ {symbol} "
+            elif value == -1:
+                equation += f"- {symbol} "
             elif value < 0:
-                equation += f"- {abs(value)}*{symbol}**{key} "
+                equation += f"- {abs(value)}*{symbol} "
             else:
-                equation += f"+ {value}*{symbol}**{key} "
+                equation += f"+ {value}*{symbol} "
            
-    return equation        
+    return equation     
         
     
 

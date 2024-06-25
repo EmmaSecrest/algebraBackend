@@ -51,7 +51,8 @@ class TestFindDegree(TestCase):
 class TestPutSecondOrderBackTogether(TestCase):
     def test_put_second_order_back_together(self):
         self.assertEqual(put_second_order_back_together({2: 2, 1: -5, 0: -6}, "x"), "2*x**2 - 5*x - 6 = 0")
-        self.assertEqual(put_second_order_back_together({2: -3, 1: -4, 0: 12}, "x"), "-3*x**2 - 4*x + 12 = 0")        
+        self.assertEqual(put_second_order_back_together({2: -3, 1: -4, 0: 12}, "x"), "-3*x**2 - 4*x + 12 = 0")    
+        self.assertEqual(put_second_order_back_together({2: 1, 1: 0, 0: 12}, "x"), "x**2 + 12 = 0")        
         
 if __name__ == '__main__':
     main()
