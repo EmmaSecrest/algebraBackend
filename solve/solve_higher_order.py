@@ -73,7 +73,42 @@ def determine_coefficients_higher_order(equation,symbol):
             
     return coefficients                
             
+def put_second_order_back_together(coefficients, symbol):
+    equation = ""
+    for key, value in coefficients.items():
+        if key == 1:
+            if value == 1:
+                equation += f"+ {symbol} "
+            elif value == -1:
+                equation += f"- {symbol} "
+            else:
+                if value < 0:
+                    equation += f"- {abs(value)}*{symbol} "
+        elif key == 0:
+            if value == 0:
+                equation += f"= 0"
+            elif value < 0:
+                equation += f"- {abs(value)} = 0"
+            else:
+                equation += f"+ {value} = 0"
+                
+        elif key == 2:
+            if value == 1:
+                equation += f"{symbol}**2 " 
+            if value == -1:
+                equation += f"- {symbol}**2 "
+            else:
+                equation += f"{value}*{symbol}**2 "
         
+        else:
+            if value == 0:
+               pass
+            elif value < 0:
+                equation += f"- {abs(value)}*{symbol}**{key} "
+            else:
+                equation += f"+ {value}*{symbol}**{key} "
+           
+    return equation        
         
     
 

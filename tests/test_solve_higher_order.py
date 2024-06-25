@@ -5,7 +5,8 @@ from solve.solve_higher_order import (
     find_degree,
     is_quadratic_factorable,
     solve_quad_switch,
-    determine_coefficients_higher_order
+    determine_coefficients_higher_order,
+    put_second_order_back_together
     )
 
 # class TestDetermineSyntheticDivision(TestCase):
@@ -46,6 +47,11 @@ class TestFindDegree(TestCase):
         self.assertEqual(find_degree("x**2 + 3*x + 2 = 0", "x"), 2)
         self.assertEqual(find_degree("x**2 - 2*x - 8 = 0", "x"), 2)
         self.assertEqual(find_degree("x-4 = 0", "x"), 1 )
+        
+class TestPutSecondOrderBackTogether(TestCase):
+    def test_put_second_order_back_together(self):
+        self.assertEqual(put_second_order_back_together({2: 2, 1: -5, 0: -6}, "x"), "2*x**2 - 5*x - 6 = 0")
+        self.assertEqual(put_second_order_back_together({2: -3, 1: -4, 0: 12}, "x"), "-3*x**2 - 4*x + 12 = 0")        
         
 if __name__ == '__main__':
     main()
