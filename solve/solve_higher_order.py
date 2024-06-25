@@ -43,13 +43,10 @@ def solve_quad_switch(equation):
         return solve_quad_no_factor(equation)
 
 def determine_coefficients_higher_order(equation,symbol):
-    left, right = equation.split('=')
     terms = splitting_terms(equation)
     coefficients = {}
     
     for term in terms:
-        print("term:", term)
-        
         if "**" in term:
             split = term.split("**")
             if split[0] == symbol:
@@ -73,7 +70,6 @@ def determine_coefficients_higher_order(equation,symbol):
             coefficients[1] = -1  
         elif "**" not in term and "*" not in term and term != symbol:
             coefficients[0] = int(term)         
-            
             
     return coefficients                
             
