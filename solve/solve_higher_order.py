@@ -42,7 +42,44 @@ def solve_quad_switch(equation):
     else:
         return solve_quad_no_factor(equation)
 
-
+def determine_coefficients_higher_order(equation,symbol):
+    left, right = equation.split('=')
+    terms = splitting_terms(equation)
+    coefficients = {}
+    
+    for term in terms:
+        print("term:", term)
+        
+        if "**" in term:
+            split = term.split("**")
+            if split[0] == symbol:
+                coefficients[int(split[1])] = 1
+            elif split[0] == "-" + symbol:
+                coefficients[int(split[1])] = -1    
+            else:
+                second_split = split[0].split("*")
+                coefficients[int(split[1])] = int(second_split[0])    
+        elif symbol in term and "*" in term and "**" not in term or term == symbol:
+            if term == symbol:
+                coefficients[1] = 1
+            elif split[0] == "-" + symbol:
+                coefficients[int(split[1])] = -1    
+            else:
+                split = term.split("*")
+                coefficients[1] = int(split[0])
+        elif term == symbol:
+            coefficients[1] = 1
+        elif term == "-" + symbol:
+            coefficients[1] = -1  
+        elif "**" not in term and "*" not in term and term != symbol:
+            coefficients[0] = int(term)         
+            
+            
+    return coefficients                
+            
+        
+        
+    
 
 def solve_synthetic_division(equation):
     pass
