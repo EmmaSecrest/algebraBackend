@@ -1,11 +1,13 @@
 from sympy import symbols, degree, Eq, solve, sympify
 import math
+from fractions import Fraction
 from solve.solve_quadratic import (
     determine_coefficients,
     splitting_terms,
     find_symbol,
     solve_quad_no_factor,
-    solve_quad_factor
+    solve_quad_factor,
+    format_solution
     )
 
 def array_factors_coefficient_list(x):
@@ -104,8 +106,64 @@ def put_second_order_back_together(coefficients, symbol):
            
     return equation     
         
+def determine_possible_zeros(leading_factors, constant_factors):
+    possible_zeros = []
+    for leading in leading_factors:
+        for constant in constant_factors:
+            possible_zero = format_solution(constant/leading)
+            if possible_zero.lstrip('-').isdigit():
+                possible_zero = int(possible_zero)
+            
+            if possible_zero not in possible_zeros:
+                possible_zeros.append(possible_zero)
+            
+    return possible_zeros
+            
+            
+            
+def synthetic_division(coefficients,zero):
+    results = []
+    
+    i = 0 
+    while i<= len(coefficients) - 1:
+        if i == 0:
+            results.append(coefficients[i])
+        else: 
+           results.append(zero*results[i-1] + coefficients[i])
+        i += 1
+    
+    return results
     
 
-def solve_synthetic_division(equation):
-    pass
+def convert_to_fraction(x):
+    if x % 1 == 0:
+        return int(x)
+    else:
+        return Fraction(x).limit_denominator()  
 
+
+def solve_synthetic_division(equation):
+    solution = []
+    
+    symbol = find_symbol(equation)
+    coefficients = determine_coefficients_higher_order(equation, symbol)
+    greatest_degree = max(coefficients.keys())
+    leading_coefficient = coefficients[greatest_degree]
+    constant = coefficients[0]
+    factors_leading_coefficient = array_factors_coefficient_list(leading_coefficient)
+    factors_constant = array_factors_coefficient_list(constant)
+    possible_zeros = sorted(determine_possible_zeros(factors_leading_coefficient, factors_constant))
+    coefficient_values = list(coefficients.values())
+    
+    instructions = "To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have ("
+    
+    for zero in possible_zeros:
+        if zero != possible_zeros[-1]:
+            instructions += f"{zero}, "
+        else:
+            instructions += f"{zero}) then use long division or synthetic division to divide them."
+    solution.append(instructions)
+    
+    
+    return solution
+    

@@ -1,4 +1,5 @@
 from unittest import TestCase, main
+from fractions import Fraction
 from solve.solve_higher_order import (
     solve_synthetic_division,
     array_factors_coefficient_list,
@@ -6,14 +7,13 @@ from solve.solve_higher_order import (
     is_quadratic_factorable,
     solve_quad_switch,
     determine_coefficients_higher_order,
-    put_second_order_back_together
+    put_second_order_back_together,
+    determine_possible_zeros,
+    synthetic_division,
+    convert_to_fraction
     )
 
-# class TestDetermineSyntheticDivision(TestCase):
-#     def test_synthetic_division(self):
-#         self.assertEqual(solve_synthetic_division("x**3 + 2*x**2 - 5*x - 6 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-1,1,-2,2,-3,3,-6,6) then use long division or synthetic division to divide them.","x+1 ===> x**2 + x - 6", "(x-2)(x-3)"],['x=-1', 'x=2', 'x=3']])
-#         self.assertEqual(solve_synthetic_division("x**3 - 3*x**2 - 4*x + 12 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-1,1,-2,2,-3,3,-4,4,-6,6,-12,12) then use long division or synthetic division to divide them.","x-3 ===> x**2 - 4", "(x+2)(x-2)",['x=3', 'x=-2', 'x=2']])
-#         
+
 
 class TestFactorableQuadratic(TestCase):
     def test_is_quadratic_factorable(self):
@@ -53,6 +53,35 @@ class TestPutSecondOrderBackTogether(TestCase):
         self.assertEqual(put_second_order_back_together({2: 2, 1: -5, 0: -6}, "x"), "2*x**2 - 5*x - 6 = 0")
         self.assertEqual(put_second_order_back_together({2: -3, 1: -4, 0: 12}, "x"), "-3*x**2 - 4*x + 12 = 0")    
         self.assertEqual(put_second_order_back_together({2: 1, 1: 0, 0: 12}, "x"), "x**2 + 12 = 0")        
+
+class TestDeterminePossibleZeros(TestCase):
+    def test_determine_possible_zeros(self):
+        self.assertEqual(determine_possible_zeros([1,-1],[9,3,1,-1,-3,-9]),[9,3,1,-1,-3,-9])
+        self.assertEqual(determine_possible_zeros([2,1,-1,-2],[6,2,1,-1,-2,6]), [3, 1, '1/2', '-1/2', -1, 6, 2, -2, -6, -3])
+        self.assertEqual(determine_possible_zeros([2,1,-1,-2],[1,-1]),['1/2', '-1/2', 1, -1])
+        
+class TestDetermineSyntheticDivision(TestCase):
+    def test_synthetic_division(self):
+        self.assertEqual(synthetic_division([1, 2,-5,-6], -1), [1, 1, -6,0])
+        self.assertEqual(synthetic_division([2,-7,3,8,-4],0.5),[2,-6,0,8,0])
+        self.assertEqual(synthetic_division([1,2,2,1],-1),[1,1,1,0])
+        self.assertEqual(synthetic_division([1,2.5,3,4,-1.5],-0.5),[1,2,2,3,-3])
+
+class TestConvertToFraction(TestCase):
+    def test_convert_to_fraction(self):
+        self.assertEqual(convert_to_fraction(0.5), Fraction(1,2))
+        self.assertEqual(convert_to_fraction(1.5), Fraction(3,2))
+        self.assertEqual(convert_to_fraction(-0.5), Fraction(-1,2))
+        self.assertEqual(convert_to_fraction(-1.5), Fraction(-3,2))
+        
+        
+        
+        
+# class TestDetermineSyntheticDivision(TestCase):
+#     def test_synthetic_division(self):
+#         self.assertEqual(solve_synthetic_division("x**3 + 2*x**2 - 5*x - 6 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-6, -3, -2, -1, 1, 2, 3, 6) then use long division or synthetic division to divide them.","-1|1 2 -5 - 6 ===> 1 1 -6 | 0", "(x-2)(x+3)",['x=-1', 'x=2', 'x=-3']])
+#         self.assertEqual(solve_synthetic_division("x**3 - 3*x**2 - 4*x + 12 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (12, 6, 4, 3, 2, 1, -1, -2, -3, -4, -6, -12) then use long division or synthetic division to divide them.","3|1 -3 -4 12 ===> 1 0 -4 | 0", "(x+2)(x-2)",['x=3', 'x=-2', 'x=2']])
+              
         
 if __name__ == '__main__':
     main()
