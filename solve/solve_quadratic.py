@@ -109,15 +109,17 @@ def determine_coefficients(terms, symbol):
             else:
                 print("split 0", split[0])
         #finding the coefficient of b
-        elif symbol in term and "*" in term and "**2" not in term or term == symbol:
+        elif symbol in term and "*" in term and "**2" not in term or term == symbol or term == "-" + symbol:
             if term == symbol:
                 b = 1
+            elif term == "-" + symbol:
+                b = -1    
             else:
                 split = term.split("*")
                 b = int(split[0])
             
         #finding the constant
-        elif "**" not in term and "*" not in term and term != symbol:
+        elif "**" not in term and "*" not in term and term != symbol :
             c = int(term)
             
     return [a, b, c]
@@ -234,7 +236,9 @@ def solve_quad_factor(equation):
                         b = factors_a[i][1]
                         d = sign_a * factors_c[j][0]
                         e = sign_c * factors_c[j][1]
-                        break
+                        # Check if the factored equation is correct
+                        if a*d == A and b*e == c and b*d + a*e == B:
+                            break
                     
         # the factored out equation will look like this when it is returned (ax + d)(bx + e) = 0
         equation, solutions = generate_equation_and_solution(a, b, d, e, symbol)

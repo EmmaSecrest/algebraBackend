@@ -75,12 +75,10 @@ class TestConvertToFraction(TestCase):
         self.assertEqual(convert_to_fraction(-1.5), Fraction(-3,2))
         
         
-        
-        
-# class TestDetermineSyntheticDivision(TestCase):
-#     def test_synthetic_division(self):
-#         self.assertEqual(solve_synthetic_division("x**3 + 2*x**2 - 5*x - 6 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-6, -3, -2, -1, 1, 2, 3, 6) then use long division or synthetic division to divide them.","-1|1 2 -5 - 6 ===> 1 1 -6 | 0", "(x-2)(x+3)",['x=-1', 'x=2', 'x=-3']])
-#         self.assertEqual(solve_synthetic_division("x**3 - 3*x**2 - 4*x + 12 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (12, 6, 4, 3, 2, 1, -1, -2, -3, -4, -6, -12) then use long division or synthetic division to divide them.","3|1 -3 -4 12 ===> 1 0 -4 | 0", "(x+2)(x-2)",['x=3', 'x=-2', 'x=2']])
+class TestDetermineSyntheticDivision(TestCase):
+    def test_synthetic_division(self):
+        self.assertEqual(solve_synthetic_division("x**3 + 2*x**2 - 5*x - 6 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-6, -3, -2, -1, 1, 2, 3, 6) then use long division or synthetic division to divide them.",'-3|1 2 -5 -6 ===> 1 -1 -2 | 0', "(x + 1)(x - 2) = 0",['x=-3', 'x = -1', 'x = 2']])
+        #self.assertEqual(solve_synthetic_division("x**3 - 3*x**2 - 4*x + 12 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-12, -6, -4, -3, -2, -1, 1, 2, 3, 4, 6, 12) then use long division or synthetic division to divide them.",'-2|1 -3 -4 12 ===> 1 -5 6 | 0', '(x + 6)(x - 1) = 0',['x=-2', 'x = -6', 'x = 1']])
               
         
 if __name__ == '__main__':

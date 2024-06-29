@@ -39,6 +39,7 @@ def is_quadratic_factorable(equation):
 
 def solve_quad_switch(equation):
     is_factorable = is_quadratic_factorable(equation)
+    
     if is_factorable:
         return solve_quad_factor(equation)
     else:
@@ -155,6 +156,7 @@ def solve_synthetic_division(equation):
     possible_zeros = sorted(determine_possible_zeros(factors_leading_coefficient, factors_constant))
     coefficient_values = list(coefficients.values())
     
+    
     instructions = "To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have ("
     
     for zero in possible_zeros:
@@ -163,6 +165,29 @@ def solve_synthetic_division(equation):
         else:
             instructions += f"{zero}) then use long division or synthetic division to divide them."
     solution.append(instructions)
+    
+    results = []
+   
+        
+    while len(coefficient_values) > 3:
+        for zero in possible_zeros:
+            result = synthetic_division(coefficient_values, zero)
+            if result[-1] == 0:
+                results.append(f"{symbol}={convert_to_fraction(zero)}")
+                solution.append( f"{convert_to_fraction(zero)}|{' '.join(map(str, coefficient_values))} ===> {' '.join(map(str, result[:-1]))} | {result[-1]}")
+                coefficient_values = result
+                coefficient_values.pop()
+                break
+            
+    new_second_order_eq = put_second_order_back_together({2: coefficient_values[0], 1: coefficient_values[1], 0: coefficient_values[2]}, symbol)
+    quad_sol = solve_quad_switch(new_second_order_eq)
+    solution.append(quad_sol[0])
+    results.append(quad_sol[1][0])
+    results.append(quad_sol[1][1])
+    solution.append(results)
+    
+    
+        
     
     
     return solution
