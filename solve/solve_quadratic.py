@@ -33,16 +33,16 @@ def find_symbol(equation):
     symbols = [match for match in matches if match]
     return symbols[0] if symbols else None
 
-def set_up_to_solve_quadratic(equation):
-    left, right = equation.split('=')
-    left = simplify_polynomials(left)
-    right = simplify_polynomials(right)
-    # Distribute the negation across the right side
-    right = distribute_negation(right)
-    result = left + right
-    result = simplify_polynomials(result)
-    result = result + " = 0"
-    return result
+# def set_up_to_solve_quadratic(equation):
+#     left, right = equation.split('=')
+#     left = simplify_polynomials(left)
+#     right = simplify_polynomials(right)
+#     # Distribute the negation across the right side
+#     right = distribute_negation(right)
+#     result = left + right
+#     result = simplify_polynomials(result)
+#     result = result + " = 0"
+#     return result
 
 def splitting_terms(equation):
     left, right = equation.split('=')
@@ -146,6 +146,7 @@ def array_factors_coefficient(x):
         for i in range(1, x+1):
             if x % i == 0:
                 results.append([i, int(x/i)])
+                results.append([-i, int(-x/i)])
     if x < 0:            
         for i in range(x+1, 0):
             if x % i == 0:
@@ -170,6 +171,8 @@ def format_solution(solution):
     return str(fraction)
 
 def generate_equation_and_solution(a, b, d, e, symbol):
+    
+    
     part1 = f"{a if a != 1 else ''}{symbol}" if a != 0 else ''
     part2 = f" {'+' if d >= 0 else '-'} {abs(d)}" if d != 0 else ''
     part3 = f"{b if b != 1 else ''}{symbol}" if b != 0 else ''
@@ -196,7 +199,6 @@ def solve_quad_factor(equation):
 
     factors_a = array_factors_coefficient(A)
     factors_c = array_factors_coefficient(c)
-    a, b, d, e = 0, 0, 0, 0
     result = []
     solutions = []
 
@@ -219,27 +221,31 @@ def solve_quad_factor(equation):
     else:
         """
         Part below is calculating the right combination for the Factors of A and the factors of C that will be added up to get B 
-        a normal factored out equation looks like this: (ax + b)(dx - e)
+        a normal factored out equation looks like this: (ax + d)(bx - e)
         so we need a*d = A or the coefficient of x^2
         and we need b*e = C or the constant
         but we also need b*d + a*e = B which is the coefficient to the middle term
 
         And we also need to take into consideration what is negative and what is positive to be sure we are producing the correct results
         """
-        signs = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
-
-        for i in range(len(factors_a)):
-            for j in range(len(factors_c)):
-                for sign_a, sign_c in signs:
-                    if (sign_a * factors_a[i][0] * factors_c[j][1] + sign_c * factors_a[i][1] * factors_c[j][0]) == B:
-                        a = factors_a[i][0]
-                        b = factors_a[i][1]
-                        d = sign_a * factors_c[j][0]
-                        e = sign_c * factors_c[j][1]
-                        
+        #the factor arrays for a nad c here are written as [[a,n], [b,m]] where a*n = A and ditto for b*m = A
+        a, b, d, e = 0, 0, 0, 0
+        for factor_a in factors_a:
+            for factor_c in factors_c:
+                if factor_a[0]*factor_c[1] + factor_a[1]*factor_c[0] == B:
+                    a = factor_a[0]
+                    b = factor_a[1]
+                    d = factor_c[0]
+                    e = factor_c[1]
+                
+                
+        
+        
         # the factored out equation will look like this when it is returned (ax + d)(bx + e) = 0
         equation, solutions = generate_equation_and_solution(a, b, d, e, symbol)
         result.append(equation)
         result.append(solutions)
 
     return result
+
+
