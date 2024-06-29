@@ -236,10 +236,7 @@ def solve_quad_factor(equation):
                         b = factors_a[i][1]
                         d = sign_a * factors_c[j][0]
                         e = sign_c * factors_c[j][1]
-                        # Check if the factored equation is correct
-                        if a*d == A and b*e == c and b*d + a*e == B:
-                            break
-                    
+                        
         # the factored out equation will look like this when it is returned (ax + d)(bx + e) = 0
         equation, solutions = generate_equation_and_solution(a, b, d, e, symbol)
         result.append(equation)
