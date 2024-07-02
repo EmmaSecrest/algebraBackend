@@ -63,7 +63,7 @@ class TestSolveQuadraticFactor(TestCase):
         self.assertEqual(solve_quad_factor("-3*x**2 + 4*x - 1 = 0"), ['(x - 1)(-3x + 1) = 0', ['x = 1', 'x = 1/3']])
         self.assertEqual(solve_quad_factor("x**2 - 2*x - 8 = 0"), ['(x + 2)(x - 4) = 0', ['x = -2', 'x = 4']])
         self.assertEqual(solve_quad_factor("3*x**2 - 7*x + 2 = 0"),  ['(-3x + 1)(-x + 2) = 0', ['x = 1/3', 'x = 2']])
-        self.assertEqual(solve_quad_factor("x**2 -6*x + 9 = 0"), ['(x - 3)(x - 3) = 0', ['x = 3', 'x = 3']])
+        self.assertEqual(solve_quad_factor("x**2 -6*x + 9 = 0"), ['(x - 3)(x - 3) = 0', ['x = 3']])
         self.assertEqual(solve_quad_factor("x**2 - 7*x + 12 = 0"), ['(x - 4)(x - 3) = 0', ['x = 4', 'x = 3']])
         self.assertEqual(solve_quad_factor("x**2 - 8*x + 15 = 0"),['(x - 5)(x - 3) = 0', ['x = 5', 'x = 3']])
         self.assertEqual(solve_quad_factor("x**2 - 4 = 0"),['(x + 2)(x - 2) = 0', ['x = -2', 'x = 2']])

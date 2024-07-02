@@ -1,6 +1,7 @@
 from sympy import symbols, degree, Eq, solve, sympify
 import math
 from fractions import Fraction
+from decimal import Decimal, ROUND_HALF_UP
 from solve.solve_quadratic import (
     determine_coefficients,
     splitting_terms,
@@ -44,7 +45,17 @@ def solve_quad_switch(equation):
         return solve_quad_factor(equation)
     else:
         return solve_quad_no_factor(equation)
+    
 
+def fraction_to_decimal(fraction_str):
+    if fraction_str.lstrip('-').isdigit():
+        return int(fraction_str)
+    else:
+        numerator, denominator = map(int, fraction_str.split('/'))
+        decimal = Decimal(numerator) / Decimal(denominator)
+        return float(decimal.quantize(Decimal('0.00'), rounding=ROUND_HALF_UP))
+   
+    
 def determine_coefficients_higher_order(equation,symbol):
     terms = splitting_terms(equation)
     coefficients = {}
@@ -58,7 +69,7 @@ def determine_coefficients_higher_order(equation,symbol):
                 coefficients[int(split[1])] = -1    
             else:
                 second_split = split[0].split("*")
-                coefficients[int(split[1])] = int(second_split[0])    
+                coefficients[int(split[1])] = fraction_to_decimal(second_split[0])    
         elif symbol in term and "*" in term and "**" not in term or term == symbol:
             if term == symbol:
                 coefficients[1] = 1
@@ -66,13 +77,13 @@ def determine_coefficients_higher_order(equation,symbol):
                 coefficients[int(split[1])] = -1    
             else:
                 split = term.split("*")
-                coefficients[1] = int(split[0])
+                coefficients[1] = fraction_to_decimal(split[0])
         elif term == symbol:
             coefficients[1] = 1
         elif term == "-" + symbol:
             coefficients[1] = -1  
         elif "**" not in term and "*" not in term and term != symbol:
-            coefficients[0] = int(term)         
+            coefficients[0] = fraction_to_decimal(term)         
             
     return coefficients                
             
@@ -174,7 +185,8 @@ def solve_synthetic_division(equation):
             result = synthetic_division(coefficient_values, zero)
             if result[-1] == 0:
                 results.append(f"{symbol}={convert_to_fraction(zero)}")
-                solution.append( f"{convert_to_fraction(zero)}|{' '.join(map(str, coefficient_values))} ===> {' '.join(map(str, result[:-1]))} | {result[-1]}")
+                # Convert the coefficients and results to fractions before adding to the solution string
+                solution.append( f"{convert_to_fraction(zero)}|{' '.join(map(str, map(convert_to_fraction, coefficient_values)))} ===> {' '.join(map(str, map(convert_to_fraction, result[:-1])))} | {convert_to_fraction(result[-1])}")
                 coefficient_values = result
                 coefficient_values.pop()
                 break
@@ -182,13 +194,15 @@ def solve_synthetic_division(equation):
     new_second_order_eq = put_second_order_back_together({2: coefficient_values[0], 1: coefficient_values[1], 0: coefficient_values[2]}, symbol)
     quad_sol = solve_quad_switch(new_second_order_eq)
     solution.append(quad_sol[0])
-    results.append(quad_sol[1][0])
-    results.append(quad_sol[1][1])
+    
+    
+    if len(quad_sol[1]) > 1:
+        results.append(quad_sol[1][0])
+        results.append(quad_sol[1][1])
+    else:
+        results.append(quad_sol[1][0])
+    
     solution.append(results)
-    
-    
-        
-    
     
     return solution
     

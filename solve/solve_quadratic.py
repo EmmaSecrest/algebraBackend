@@ -3,6 +3,7 @@ import re
 import math
 from solve.solve_linear_eq import solve_linear_y_intercept_eq
 from fractions import Fraction
+from decimal import Decimal, ROUND_HALF_UP
 
 def distribute_negation(expression):
     split = re.split(" ",expression)
@@ -102,8 +103,18 @@ def determine_coefficients(terms, symbol):
             
             if len(split[0]) > 1:
                 second_split = split[0].split("*")
+                if second_split[0].lstrip('-').isdigit():
+                   a = int(second_split[0])
+                else:
+                    try:
+                    # Try to convert to float
+                        a = float(second_split[0])
+                    except ValueError:
+                        # If it fails, handle as fraction
+                        numerator, denominator = map(int,second_split[0].split('/'))
+                        decimal = Decimal(numerator) / Decimal(denominator)
+                        a = float(decimal.quantize(Decimal('0.00'), rounding=ROUND_HALF_UP))     
                 
-                a = int(second_split[0])
             elif split[0] == symbol:
                 a = 1    
             else:
@@ -116,12 +127,31 @@ def determine_coefficients(terms, symbol):
                 b = -1    
             else:
                 split = term.split("*")
-                b = int(split[0])
-            
+                if split[0].lstrip('-').isdigit():
+                    b = int(split[0])
+                else:
+                    try:
+                        # Try to convert to float
+                        b = float(split[0])
+                    except ValueError:
+                        # If it fails, handle as fraction
+                        numerator, denominator = map(int,split[0].split('/'))
+                        decimal = Decimal(numerator) / Decimal(denominator)
+                        b = float(decimal.quantize(Decimal('0.00'), rounding=ROUND_HALF_UP))     
+                
         #finding the constant
         elif "**" not in term and "*" not in term and term != symbol :
-            c = int(term)
-            
+            if term.lstrip('-').isdigit():
+                c = int(term)
+            else:
+                try:
+            # Try to convert to float
+                    c = float(term)
+                except ValueError:
+            # If it fails, handle as fraction
+                    numerator, denominator = map(int,term.split('/'))
+                    decimal = Decimal(numerator) / Decimal(denominator)
+                    c = float(decimal.quantize(Decimal('0.00'), rounding=ROUND_HALF_UP))     
     return [a, b, c]
 
 
@@ -191,6 +221,13 @@ def generate_equation_and_solution(a, b, d, e, symbol):
     return [equation, solutions]
 
             
+def unique_solutions(solutions):
+    unique_solutions = []
+    for solution in solutions:
+        if solution not in unique_solutions:
+            unique_solutions.append(solution)
+    return unique_solutions
+
 
 def solve_quad_factor(equation):
     symbol = find_symbol(equation)
@@ -244,6 +281,8 @@ def solve_quad_factor(equation):
         # the factored out equation will look like this when it is returned (ax + d)(bx + e) = 0
         equation, solutions = generate_equation_and_solution(a, b, d, e, symbol)
         result.append(equation)
+        
+        solutions = unique_solutions(solutions)
         result.append(solutions)
 
     return result
