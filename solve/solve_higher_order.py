@@ -1,4 +1,4 @@
-from sympy import symbols, degree, Eq, solve, sympify
+from sympy import symbols, degree, Eq, solve, sympify,re
 import math
 from fractions import Fraction
 from decimal import Decimal, ROUND_HALF_UP
@@ -196,19 +196,19 @@ def solve_synthetic_division(equation):
                 coefficient_values.pop()
                 break
         if not found_zero:
-            print(equation)
+            
             solution.append("No rational solution can be found. Brute forcing a solution.")
             left, right = equation.split("=")
             results_unfiltered_non_numerical = solve(left,symbol)
-            results_unfiltered = [sol.evalf() for sol in results_unfiltered_non_numerical]
+            results_unfiltered = [re(sol.evalf()) for sol in results_unfiltered_non_numerical]
             break
         
-    print(results_unfiltered)
+    
     
     if len(results_unfiltered) > 0:
         for result in results_unfiltered:
             if result.is_real is not None and result.is_real:
-                results.append(f"{symbol} = {result}")
+                results.append(f"{symbol} = {round(result,2)}")
         if results == []:
             results.append("No real solutions")     
     else:
