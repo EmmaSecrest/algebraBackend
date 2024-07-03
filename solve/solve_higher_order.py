@@ -83,9 +83,13 @@ def determine_coefficients_higher_order(equation,symbol):
         elif term == "-" + symbol:
             coefficients[1] = -1  
         elif "**" not in term and "*" not in term and term != symbol:
-            coefficients[0] = fraction_to_decimal(term)         
-            
-    return coefficients                
+            coefficients[0] = fraction_to_decimal(term)
+    keys = list(coefficients.keys())
+    for i in range(0, keys[0]):
+        if i not in keys:
+            coefficients[i] = 0
+          
+    return dict(sorted(coefficients.items(),reverse=True))             
             
 def put_second_order_back_together(coefficients, symbol):
     equation = ""
@@ -178,18 +182,30 @@ def solve_synthetic_division(equation):
     solution.append(instructions)
     
     results = []
-   
-        
+    results_unfiltered = []
     while len(coefficient_values) > 3:
+        found_zero = False
         for zero in possible_zeros:
             result = synthetic_division(coefficient_values, zero)
             if result[-1] == 0:
+                found_zero = True
                 results.append(f"{symbol}={convert_to_fraction(zero)}")
                 # Convert the coefficients and results to fractions before adding to the solution string
                 solution.append( f"{convert_to_fraction(zero)}|{' '.join(map(str, map(convert_to_fraction, coefficient_values)))} ===> {' '.join(map(str, map(convert_to_fraction, result[:-1])))} | {convert_to_fraction(result[-1])}")
                 coefficient_values = result
                 coefficient_values.pop()
                 break
+        if not found_zero:
+            print(equation)
+            results.append("No rational solution can be found. Brute forcing solution")
+            results_unfiltered = solve(equation,symbol)
+            break
+        
+    if len(results_unfiltered) > 0:
+        for result in results_unfiltered:
+            if result.is_real:
+                results.append(f"{symbol} = {result}")        
+            
             
     new_second_order_eq = put_second_order_back_together({2: coefficient_values[0], 1: coefficient_values[1], 0: coefficient_values[2]}, symbol)
     quad_sol = solve_quad_switch(new_second_order_eq)
