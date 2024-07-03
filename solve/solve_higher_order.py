@@ -197,26 +197,28 @@ def solve_synthetic_division(equation):
                 break
         if not found_zero:
             print(equation)
-            results.append("No rational solution can be found. Brute forcing solution")
-            results_unfiltered = solve(equation,symbol)
+            solution.append("No rational solution can be found. Brute forcing a solution")
+            left, right = equation.split("=")
+            results_unfiltered = solve(left,symbol)
             break
         
     if len(results_unfiltered) > 0:
         for result in results_unfiltered:
             if result.is_real:
                 results.append(f"{symbol} = {result}")        
-            
-            
-    new_second_order_eq = put_second_order_back_together({2: coefficient_values[0], 1: coefficient_values[1], 0: coefficient_values[2]}, symbol)
-    quad_sol = solve_quad_switch(new_second_order_eq)
-    solution.append(quad_sol[0])
-    
-    
-    if len(quad_sol[1]) > 1:
-        results.append(quad_sol[1][0])
-        results.append(quad_sol[1][1])
     else:
-        results.append(quad_sol[1][0])
+        new_second_order_eq = put_second_order_back_together({2: coefficient_values[0], 1: coefficient_values[1], 0: coefficient_values[2]}, symbol)
+        quad_sol = solve_quad_switch(new_second_order_eq)
+        solution.append(quad_sol[0])
+    
+    
+        if len(quad_sol[1]) > 1:
+            results.append(quad_sol[1][0])
+            results.append(quad_sol[1][1])
+        else:
+            results.append(quad_sol[1][0])        
+            
+    
     
     solution.append(results)
     
