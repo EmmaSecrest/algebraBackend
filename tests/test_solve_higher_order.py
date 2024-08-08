@@ -87,7 +87,7 @@ class TestFractionToDecimal(TestCase):
         self.assertEqual(fraction_to_decimal('1/4'),0.25)
         self.assertEqual(fraction_to_decimal('-5'),-5)       
 
-#TODO add more tests here some with fractions and some that go down the quadratic equation route and higher level equations like 4th and 5th order
+#TODO add a 4th or 5th degree where two zeros are the same
 class TestDetermineSyntheticDivision(TestCase):
     def test_synthetic_division(self):
         self.assertEqual(solve_synthetic_division("x**3 + 2*x**2 - 5*x - 6 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-6, -3, -2, -1, 1, 2, 3, 6) then use long division or synthetic division to divide them.",'-3|1 2 -5 -6 ===> 1 -1 -2 | 0', '(-x - 1)(-x + 2) = 0',['x=-3', 'x = -1', 'x = 2']])
@@ -96,6 +96,7 @@ class TestDetermineSyntheticDivision(TestCase):
         self.assertEqual(solve_synthetic_division("x**3 + 3/2*x**2 - 1/2*x -1 = 0"),["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-1, 1) then use long division or synthetic division to divide them.",'-1|1 3/2 -1/2 -1 ===> 1 1/2 -1 | 0', 'Use quadratic equation with a = 1, b = 0.5 and c = -1.0', ['x=-1', 'x = 0.78', 'x = -1.28']])
         self.assertEqual(solve_synthetic_division("x**3 - 4*x - 1 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-1, 1) then use long division or synthetic division to divide them.","No rational solution can be found. Brute forcing a solution.", ['x = -0.25', 'x = -1.86', 'x = 2.11']])
         self.assertEqual(solve_synthetic_division("x**3 + 3*x**2 + 4*x + 2 = 0",), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-2, -1, 1, 2) then use long division or synthetic division to divide them.",'-1|1 3 4 2 ===> 1 2 2 | 0', 'Use quadratic equation with a = 1, b = 2 and c = 2', ['x=-1']])
+        self.assertEqual(solve_synthetic_division("x**4 + 2*x**3 - 7*x**2 - 8*x + 12 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-12, -6, -4, -3, -2, -1, 1, 2, 3, 4, 6, 12) then use long division or synthetic division to divide them.",'-3|1 2 -7 -8 12 ===> 1 -1 -4 4 | 0','-2|1 -1 -4 4 ===> 1 -3 2 | 0' ,"(x - 2)(x - 1) = 0", ['x=-3',"x=-2" ,'x = 2', 'x = 1']])
         
               
         
