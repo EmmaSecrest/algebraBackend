@@ -218,8 +218,14 @@ def solve_synthetic_division(equation):
     
     
         if len(quad_sol[1]) > 1:
-            results.append(quad_sol[1][0])
-            results.append(quad_sol[1][1])
+            if quad_sol[1][0] == quad_sol[1][1]:
+                results.append(quad_sol[1][0])
+            if "N" in quad_sol[1] and "o" in quad_sol[1]:
+                print("got here")
+                pass
+            else:
+                results.append(quad_sol[1][0])
+                results.append(quad_sol[1][1])
         else:
             results.append(quad_sol[1][0])        
             
