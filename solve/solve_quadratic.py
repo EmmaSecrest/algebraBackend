@@ -1,4 +1,5 @@
 from simplify.simplify_expression import simplify_polynomials
+from sympy import symbols, degree, Eq, solve
 import re
 import math
 from solve.solve_linear_eq import solve_linear_y_intercept_eq
@@ -165,6 +166,7 @@ def solve_quad_no_factor(equation):
    
     result.append(f"Use quadratic equation with a = {a}, b = {b} and c = {c}")
     if answer == "No real solutions":
+        left, right = equation.split('=')
         result.append(answer)
     else:
         result.append([symbol + " = " + str(answer[0]), symbol + " = " + str(answer[1])])

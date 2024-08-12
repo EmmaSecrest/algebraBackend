@@ -233,4 +233,7 @@ def solve_synthetic_division(equation):
     solution.append(results)
     
     return solution
+
+def solve_sum_diff_of_cubes(equation):
+    pass
     

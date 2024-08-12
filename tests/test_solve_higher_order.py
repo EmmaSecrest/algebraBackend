@@ -12,6 +12,7 @@ from solve.solve_higher_order import (
     synthetic_division,
     convert_to_fraction,
     fraction_to_decimal,
+    solve_sum_diff_of_cubes
     )
 
 
@@ -98,6 +99,12 @@ class TestDetermineSyntheticDivision(TestCase):
         self.assertEqual(solve_synthetic_division("x**3 + 3*x**2 + 4*x + 2 = 0",), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-2, -1, 1, 2) then use long division or synthetic division to divide them.",'-1|1 3 4 2 ===> 1 2 2 | 0', 'Use quadratic equation with a = 1, b = 2 and c = 2', ['x=-1']])
         self.assertEqual(solve_synthetic_division("x**4 + 2*x**3 - 7*x**2 - 8*x + 12 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-12, -6, -4, -3, -2, -1, 1, 2, 3, 4, 6, 12) then use long division or synthetic division to divide them.",'-3|1 2 -7 -8 12 ===> 1 -1 -4 4 | 0','-2|1 -1 -4 4 ===> 1 -3 2 | 0' ,"(x - 2)(x - 1) = 0", ['x=-3',"x=-2" ,'x = 2', 'x = 1']])
         self.assertEqual(solve_synthetic_division("x**4 + 3*x**3 - 3*x**2 - 7*x + 6 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-6, -3, -2, -1, 1, 2, 3, 6) then use long division or synthetic division to divide them.",'-3|1 3 -3 -7 6 ===> 1 0 -3 2 | 0', "-2|1 0 -3 2 ===> 1 -2 1 | 0","(x - 1)(x - 1) = 0", ["x=-3","x=-2",'x = 1']])
+
+
+class TestSumDiffOfCubes(TestCase):
+    def test_solve_sum_of_cubes(self):
+        self.assertEqual(solve_sum_diff_of_cubes("x**3 + 27 = 0"), ["(x + 3)(x**2 - 3*x + 9) = 0","Use the quadratic formula with a = 1, b = -3 and c = 9" ,['x = -3']])
+               
               
         
 if __name__ == '__main__':
