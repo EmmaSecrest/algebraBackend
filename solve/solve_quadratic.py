@@ -1,5 +1,5 @@
 from simplify.simplify_expression import simplify_polynomials
-from sympy import symbols, degree, Eq, solve
+from sympy import symbols, degree, Eq, solve,sqrt
 import re
 import math
 from solve.solve_linear_eq import solve_linear_y_intercept_eq
@@ -71,20 +71,13 @@ def quadratic_formula(a, b, c):
     determinate = b**2 - 4*a*c
     if determinate < 0:
         return "No real solutions"
-        
-    else: 
-        part_1 = math.sqrt(determinate)
+    else:
+        part_1 = sqrt(determinate)
         part_2 = 2*a
         solution_1 = (-b + part_1) / part_2
         solution_2 = (-b - part_1) / part_2
         solutions = [solution_1, solution_2]
         
-        for i in range(len(solutions)):
-            if str(solutions[i]).endswith('.0'):
-                solutions[i] = int(solutions[i])
-            else:
-                solutions[i] = round(solutions[i], 2)
-                
         if solution_1 == solution_2:
             return solution_1
         else:
@@ -166,7 +159,11 @@ def solve_quad_no_factor(equation):
    
     result.append(f"Use quadratic equation with a = {a}, b = {b} and c = {c}")
     if answer == "No real solutions":
+        answer = []
         left, right = equation.split('=')
+        imaginary_numbers = solve(left, symbol)
+        imaginary_numbers_as_strings = [str(num) for num in imaginary_numbers]
+        answer.extend(imaginary_numbers_as_strings)
         result.append(answer)
     else:
         result.append([symbol + " = " + str(answer[0]), symbol + " = " + str(answer[1])])

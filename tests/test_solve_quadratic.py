@@ -1,6 +1,7 @@
 #to run tests use python -m unittest discover
 from unittest import TestCase, main
 
+
 from solve.solve_quadratic import (
     solve_quad_no_factor,
     # set_up_to_solve_quadratic,
@@ -24,10 +25,10 @@ class TestDetermineCoefficients(TestCase):
 class SolveQuadraticNoFactor(TestCase):
     def test_quadratic_no_factor(self):
         self.assertEqual(solve_quad_no_factor("x**2 + 5*x + 6 = 0"),[  "Use quadratic equation with a = 1, b = 5 and c = 6",['x = -2', 'x = -3']])
-        self.assertEqual(solve_quad_no_factor("3*x**2 - 6*x + 7 = 0"), ["Use quadratic equation with a = 3, b = -6 and c = 7", 'No real solutions'])
-        self.assertEqual(solve_quad_no_factor("2*x**2 + 4*x + 1 = 0"), ["Use quadratic equation with a = 2, b = 4 and c = 1", ['x = -0.29', 'x = -1.71']])
-        self.assertEqual(solve_quad_no_factor("x**2 + x + 1 = 0"), ["Use quadratic equation with a = 1, b = 1 and c = 1", 'No real solutions'])
-        self.assertEqual(solve_quad_no_factor("x**2 - 5 = 0"), ["Use quadratic equation with a = 1, b = 0 and c = -5", ['x = 2.24', 'x = -2.24']])
+        self.assertEqual(solve_quad_no_factor("3*x**2 - 6*x + 7 = 0"), ["Use quadratic equation with a = 3, b = -6 and c = 7", ['1 - 2*sqrt(3)*I/3', '1 + 2*sqrt(3)*I/3']])
+        self.assertEqual(solve_quad_no_factor("2*x**2 + 4*x + 1 = 0"), ["Use quadratic equation with a = 2, b = 4 and c = 1", ['x = -1 + sqrt(2)/2', 'x = -1 - sqrt(2)/2']])
+        self.assertEqual(solve_quad_no_factor("x**2 + x + 1 = 0"), ["Use quadratic equation with a = 1, b = 1 and c = 1", ['-1/2 - sqrt(3)*I/2', '-1/2 + sqrt(3)*I/2']])
+        self.assertEqual(solve_quad_no_factor("x**2 - 5 = 0"), ["Use quadratic equation with a = 1, b = 0 and c = -5", ['x = sqrt(5)', 'x = -sqrt(5)']])
 
 # class TestSetUpToSolveQuadratic(TestCase):
 #     def test_set_up_to_solve_quadratic(self):

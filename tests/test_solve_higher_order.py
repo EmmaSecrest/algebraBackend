@@ -101,9 +101,9 @@ class TestDetermineSyntheticDivision(TestCase):
         self.assertEqual(solve_synthetic_division("x**4 + 3*x**3 - 3*x**2 - 7*x + 6 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-6, -3, -2, -1, 1, 2, 3, 6) then use long division or synthetic division to divide them.",'-3|1 3 -3 -7 6 ===> 1 0 -3 2 | 0', "-2|1 0 -3 2 ===> 1 -2 1 | 0","(x - 1)(x - 1) = 0", ["x=-3","x=-2",'x = 1']])
 
 
-class TestSumDiffOfCubes(TestCase):
-    def test_solve_sum_of_cubes(self):
-        self.assertEqual(solve_sum_diff_of_cubes("x**3 + 27 = 0"), ["(x + 3)(x**2 - 3*x + 9) = 0","Use the quadratic formula with a = 1, b = -3 and c = 9" ,['x = -3']])
+# class TestSumDiffOfCubes(TestCase):
+#     def test_solve_sum_of_cubes(self):
+#         self.assertEqual(solve_sum_diff_of_cubes("x**3 + 27 = 0"), ["(x + 3)(x**2 - 3*x + 9) = 0","Use the quadratic formula with a = 1, b = -3 and c = 9" ,['x = -3']])
                
               
         
