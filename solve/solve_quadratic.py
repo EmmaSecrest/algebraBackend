@@ -1,5 +1,5 @@
 from simplify.simplify_expression import simplify_polynomials
-from sympy import symbols, degree, Eq, solve,sqrt
+from sympy import symbols, degree, Eq, solve,sqrt,simplify
 import re
 import math
 from solve.solve_linear_eq import solve_linear_y_intercept_eq
@@ -76,7 +76,7 @@ def quadratic_formula(a, b, c):
         part_2 = 2*a
         solution_1 = (-b + part_1) / part_2
         solution_2 = (-b - part_1) / part_2
-        solutions = [solution_1, solution_2]
+        solutions = [simplify(solution_1), simplify(solution_2)]
         
         if solution_1 == solution_2:
             return solution_1
