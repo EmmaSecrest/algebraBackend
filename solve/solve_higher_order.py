@@ -1,5 +1,6 @@
 from sympy import symbols, degree, Eq, solve, sympify,re
 import math
+import re
 from fractions import Fraction
 from decimal import Decimal, ROUND_HALF_UP
 from solve.solve_quadratic import (
@@ -235,5 +236,50 @@ def solve_synthetic_division(equation):
     return solution
 
 def solve_sum_diff_of_cubes(equation):
-    pass
+    left, right = equation.split('=')
+    symbol = find_symbol(equation)
+    coefficients = determine_coefficients_higher_order(equation, symbol)
+    solution = []
+    results = []
+    
+    third_order_cube_root = int(coefficients[3] ** (1/3))
+    constant_cube_root = int(coefficients[0] ** (1/3))
+    
+    if "+" in left:
+        if third_order_cube_root == 1:
+            solution.append(f"Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> ({symbol}**2 + {constant_cube_root})({symbol}**2 - {constant_cube_root}*{symbol} + {constant_cube_root**2}) ")
+            results.append(f'{symbol} = {-abs(constant_cube_root)}')
+        else:
+            solution.append(f"Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> ({third_order_cube_root}*{symbol}**2 + {constant_cube_root})({third_order_cube_root**2}{symbol}**2 + {constant_cube_root * third_order_cube_root}*{symbol} + {constant_cube_root**2})")
+            zero = convert_to_fraction(constant_cube_root/third_order_cube_root)
+            results.append(f'{symbol} = {-abs(zero)}')
+        
+        constants = {
+            2: third_order_cube_root**2,
+            1: -abs(third_order_cube_root * constant_cube_root),
+            0: constant_cube_root**2
+        }
+    elif "-" in left:
+        if third_order_cube_root == 1:
+            solution.append(f"Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> ({symbol}**2 - {constant_cube_root})({symbol}**2 + {constant_cube_root}*{symbol} + {constant_cube_root**2}) ")
+            results.append(f'{symbol} = {-abs(constant_cube_root)}')
+        else:
+            solution.append(f"Use the difference of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> ({third_order_cube_root}*{symbol}**2 - {constant_cube_root})({third_order_cube_root**2}{symbol}**2 + {constant_cube_root * third_order_cube_root}*{symbol} + {constant_cube_root**2})")
+            zero = convert_to_fraction(constant_cube_root/third_order_cube_root)
+            results.append(f'{symbol} = {-abs(zero)}')
+        
+        constants = {
+            2: third_order_cube_root**2,
+            1: abs(third_order_cube_root * constant_cube_root),
+            0: constant_cube_root**2
+        }
+        
+    print(constants)
+   
+            
+            
+    
+      
+        
+    
     

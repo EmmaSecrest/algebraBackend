@@ -163,6 +163,7 @@ def solve_quad_no_factor(equation):
         left, right = equation.split('=')
         imaginary_numbers = solve(left, symbol)
         imaginary_numbers_as_strings = [str(num) for num in imaginary_numbers]
+        # TODO: add x = before the imaginary numbers
         answer.extend(imaginary_numbers_as_strings)
         result.append(answer)
     else:
