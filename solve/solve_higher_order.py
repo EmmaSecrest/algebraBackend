@@ -172,9 +172,7 @@ def solve_synthetic_division(equation):
     possible_zeros = sorted(determine_possible_zeros(factors_leading_coefficient, factors_constant))
     coefficient_values = list(coefficients.values())
     
-    
     instructions = "To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have ("
-    
     for zero in possible_zeros:
         if zero != possible_zeros[-1]:
             instructions += f"{zero}, "
@@ -191,45 +189,33 @@ def solve_synthetic_division(equation):
             if result[-1] == 0:
                 found_zero = True
                 results.append(f"{symbol}={convert_to_fraction(zero)}")
-                # Convert the coefficients and results to fractions before adding to the solution string
-                solution.append( f"{convert_to_fraction(zero)}|{' '.join(map(str, map(convert_to_fraction, coefficient_values)))} ===> {' '.join(map(str, map(convert_to_fraction, result[:-1])))} | {convert_to_fraction(result[-1])}")
-                coefficient_values = result
-                coefficient_values.pop()
+                solution.append(f"{convert_to_fraction(zero)}|{' '.join(map(str, map(convert_to_fraction, coefficient_values)))} ===> {' '.join(map(str, map(convert_to_fraction, result[:-1])))} | {convert_to_fraction(result[-1])}")
+                coefficient_values = result[:-1]  # Remove the last element which is zero
                 break
         if not found_zero:
-            
             solution.append("No rational solution can be found. Brute forcing a solution.")
             left, right = equation.split("=")
-            results_unfiltered_non_numerical = solve(left,symbol)
-            results_unfiltered = [re(sol.evalf()) for sol in results_unfiltered_non_numerical]
+            results_unfiltered_non_numerical = solve(left, symbol)
+            results_unfiltered = [sol.evalf().as_real_imag()[0] for sol in results_unfiltered_non_numerical]
             break
-        
     
-    
-    if len(results_unfiltered) > 0:
+    if results_unfiltered:
         for result in results_unfiltered:
             if result.is_real is not None and result.is_real:
-                results.append(f"{symbol} = {round(result,2)}")
-        if results == []:
-            results.append("No real solutions")     
+                results.append(f"{symbol} = {round(result, 2)}")
+        if not results:
+            results.append("No real solutions")
     else:
         new_second_order_eq = put_second_order_back_together({2: coefficient_values[0], 1: coefficient_values[1], 0: coefficient_values[2]}, symbol)
         quad_sol = solve_quad_switch(new_second_order_eq)
         solution.append(quad_sol[0])
-    
-    
         if len(quad_sol[1]) > 1:
             if quad_sol[1][0] == quad_sol[1][1]:
                 results.append(quad_sol[1][0])
-            if "N" in quad_sol[1] and "o" in quad_sol[1]:
-                pass
-            else:
-                results.append(quad_sol[1][0])
-                results.append(quad_sol[1][1])
+            if "N" not in quad_sol[1] and "o" not in quad_sol[1]:
+                results.extend(quad_sol[1])
         else:
-            results.append(quad_sol[1][0])        
-            
-    
+            results.append(quad_sol[1][0])
     
     solution.append(results)
     
