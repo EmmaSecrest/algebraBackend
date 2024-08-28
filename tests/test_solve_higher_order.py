@@ -101,13 +101,13 @@ class TestDetermineSyntheticDivision(TestCase):
         self.assertEqual(solve_synthetic_division("x**4 + 3*x**3 - 3*x**2 - 7*x + 6 = 0"), ["To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-6, -3, -2, -1, 1, 2, 3, 6) then use long division or synthetic division to divide them.",'-3|1 3 -3 -7 6 ===> 1 0 -3 2 | 0', "-2|1 0 -3 2 ===> 1 -2 1 | 0","(x - 1)(x - 1) = 0", ["x=-3","x=-2",'x = 1']])
 
 
-# class TestSumDiffOfCubes(TestCase):
-#     def test_solve_sum_of_cubes(self):
-#         self.assertEqual(solve_sum_diff_of_cubes("x**3 + 27 = 0"), ["Use the sum of cubes equation: (a*x + b)(a**2*x**2 + a*b*x + b**2) ===> (x + 3)(x**2 - 3*x + 9) = 0","Use the quadratic formula with a = 1, b = -3 and c = 9" ,['x = -3', "3/2 - 3*sqrt(3)*I/2", "3/2 + 3*sqrt(3)*I/2"]])
-#         self.assertEqual(solve_sum_diff_of_cubes("x**3 - 8 = 0"), ["Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> (x - 2)(x**2 + 2*x + 4) = 0","Use the quadratic formula with a = 1, b = 2 and c = 4" ,['x = 2', "-1 - I*sqrt(3)", "-1 + I*sqrt(3)"]])
-#         self.assertEqual(solve_sum_diff_of_cubes("8*x**3 + 1 = 0"), ["Use the sum of cubes equation: (a*x + b)(a**2*x**2 + a*b*x + b**2) ===> (2*x + 1)(4*x**2 - 2*x + 1) = 0","Use the quadratic formula with a = 4, b = -2 and c = 1" ,['x = -1/2', "1/4 - sqrt(3)*I/4", "1/4 + sqrt(3)*I/4"]])
-#         self.assertEqual(solve_sum_diff_of_cubes("64*x**3 - 1 = 0"), ["Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> (4*x - 1)(16*x**2 + 4*x + 1) = 0","Use the quadratic formula with a = 16, b = 4 and c = 1" ,['x = 1/4', "-1/8 - sqrt(3)*I/8", "-1/8 + sqrt(3)*I/8"]])
-#         self.assertEqual(solve_sum_diff_of_cubes("8*x**3 - 27 = 0"), ["Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> (2*x - 3)(4*x**2 + 6*x + 9) = 0","Use the quadratic formula with a = 4, b = 6 and c = 9" ,['x = 3/2', "-3/4 - 3*sqrt(3)*I/4", "-3/4 + 3*sqrt(3)*I/4"]])
+class TestSumDiffOfCubes(TestCase):
+    def test_solve_sum_of_cubes(self):
+        self.assertEqual(solve_sum_diff_of_cubes("x**3 + 27 = 0"), ["Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> (x + 3)(x**2 - 3*x + 9)","Use quadratic equation with a = 1, b = -3 and c = 9" ,['x = -3', "3/2 - 3*sqrt(3)*I/2", "3/2 + 3*sqrt(3)*I/2"]])
+        self.assertEqual(solve_sum_diff_of_cubes("x**3 - 8 = 0"), ["Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> (x - 2)(x**2 + 2*x + 4)","Use quadratic equation with a = 1, b = 2 and c = 4" ,['x = 2', '-1 - sqrt(3)*I', '-1 + sqrt(3)*I']])
+        self.assertEqual(solve_sum_diff_of_cubes("8*x**3 + 1 = 0"), ["Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> (2*x + 1)(4*x**2 - 2*x + 1)","Use quadratic equation with a = 4, b = -2 and c = 1" ,['x = -1/2', "1/4 - sqrt(3)*I/4", "1/4 + sqrt(3)*I/4"]])
+        self.assertEqual(solve_sum_diff_of_cubes("64*x**3 - 1 = 0"), ["Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> (4*x - 1)(16*x**2 + 4*x + 1)","Use quadratic equation with a = 16, b = 4 and c = 1" ,['x = 1/4', "-1/8 - sqrt(3)*I/8", "-1/8 + sqrt(3)*I/8"]])
+        self.assertEqual(solve_sum_diff_of_cubes("8*x**3 - 27 = 0"), ["Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> (2*x - 3)(4*x**2 + 6*x + 9)","Use quadratic equation with a = 4, b = 6 and c = 9" ,['x = 3/2', "-3/4 - 3*sqrt(3)*I/4", "-3/4 + 3*sqrt(3)*I/4"]])
         
                
               

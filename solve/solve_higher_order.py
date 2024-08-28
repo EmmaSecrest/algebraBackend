@@ -188,7 +188,7 @@ def solve_synthetic_division(equation):
                 found_zero = True
                 results.append(f"{symbol}={convert_to_fraction(zero)}")
                 solution.append(f"{convert_to_fraction(zero)}|{' '.join(map(str, map(convert_to_fraction, coefficient_values)))} ===> {' '.join(map(str, map(convert_to_fraction, result[:-1])))} | {convert_to_fraction(result[-1])}")
-                coefficient_values = result[:-1]  # Remove the last element which is zero
+                coefficient_values = result[:-1]  
                 break
         if not found_zero:
             solution.append("No rational solution can be found. Brute forcing a solution.")
@@ -228,39 +228,48 @@ def solve_sum_diff_of_cubes(equation):
     solution = []
     results = []
     
-    third_order_cube_root = int(coefficients[3] ** (1/3))
-    constant_cube_root = int(coefficients[0] ** (1/3))
+    third_order_cube_root = round(abs(coefficients[3]) ** (1/3))
+    constant_cube_root = round(abs(coefficients[0]) ** (1/3))
+    
     
     if "+" in left:
         if third_order_cube_root == 1:
-            solution.append(f"Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> ({symbol}**2 + {constant_cube_root})({symbol}**2 - {constant_cube_root}*{symbol} + {constant_cube_root**2}) ")
+            solution.append(f"Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> ({symbol} + {constant_cube_root})({symbol}**2 - {constant_cube_root}*{symbol} + {constant_cube_root**2})")
             results.append(f'{symbol} = {-abs(constant_cube_root)}')
         else:
-            solution.append(f"Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> ({third_order_cube_root}*{symbol}**2 + {constant_cube_root})({third_order_cube_root**2}{symbol}**2 + {constant_cube_root * third_order_cube_root}*{symbol} + {constant_cube_root**2})")
+            solution.append(f"Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> ({third_order_cube_root}*{symbol} + {constant_cube_root})({third_order_cube_root**2}*{symbol}**2 - {constant_cube_root * third_order_cube_root}*{symbol} + {constant_cube_root**2})")
             zero = convert_to_fraction(constant_cube_root/third_order_cube_root)
             results.append(f'{symbol} = {-abs(zero)}')
         
-        constants = {
+        coefficients = {
             2: third_order_cube_root**2,
             1: -abs(third_order_cube_root * constant_cube_root),
             0: constant_cube_root**2
         }
     elif "-" in left:
         if third_order_cube_root == 1:
-            solution.append(f"Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> ({symbol}**2 - {constant_cube_root})({symbol}**2 + {constant_cube_root}*{symbol} + {constant_cube_root**2}) ")
-            results.append(f'{symbol} = {-abs(constant_cube_root)}')
+            solution.append(f"Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> ({symbol} - {constant_cube_root})({symbol}**2 + {constant_cube_root}*{symbol} + {constant_cube_root**2})")
+            results.append(f'{symbol} = {abs(constant_cube_root)}')
         else:
-            solution.append(f"Use the difference of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> ({third_order_cube_root}*{symbol}**2 - {constant_cube_root})({third_order_cube_root**2}{symbol}**2 + {constant_cube_root * third_order_cube_root}*{symbol} + {constant_cube_root**2})")
+            solution.append(f"Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> ({third_order_cube_root}*{symbol} - {constant_cube_root})({third_order_cube_root**2}*{symbol}**2 + {constant_cube_root * third_order_cube_root}*{symbol} + {constant_cube_root**2})")
             zero = convert_to_fraction(constant_cube_root/third_order_cube_root)
-            results.append(f'{symbol} = {-abs(zero)}')
+            results.append(f'{symbol} = {abs(zero)}')
         
-        constants = {
+        coefficients = {
             2: third_order_cube_root**2,
             1: abs(third_order_cube_root * constant_cube_root),
             0: constant_cube_root**2
         }
         
-    print(constants)
+    new_second_order_eq = put_second_order_back_together(coefficients, symbol)
+    quad_sol = solve_quad_switch(new_second_order_eq)
+    solution.append(quad_sol[0])
+   
+    for sol in quad_sol[1]:
+        results.append(sol)
+    
+    solution.append(results)
+    return solution
    
             
             
