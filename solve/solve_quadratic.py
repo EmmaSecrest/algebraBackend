@@ -162,8 +162,7 @@ def solve_quad_no_factor(equation):
         answer = []
         left, right = equation.split('=')
         imaginary_numbers = solve(left, symbol)
-        imaginary_numbers_as_strings = [str(num) for num in imaginary_numbers]
-        # TODO: add x = before the imaginary numbers
+        imaginary_numbers_as_strings = [f"x = {num}" for num in imaginary_numbers]
         answer.extend(imaginary_numbers_as_strings)
         result.append(answer)
     else:
