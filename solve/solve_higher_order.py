@@ -158,7 +158,6 @@ def convert_to_fraction(x):
     else:
         return Fraction(x).limit_denominator()  
 
-
 def solve_synthetic_division(equation):
     solution = []
     
@@ -167,21 +166,20 @@ def solve_synthetic_division(equation):
     greatest_degree = max(coefficients.keys())
     leading_coefficient = coefficients[greatest_degree]
     constant = coefficients[0]
+    
     factors_leading_coefficient = array_factors_coefficient_list(leading_coefficient)
     factors_constant = array_factors_coefficient_list(constant)
     possible_zeros = sorted(determine_possible_zeros(factors_leading_coefficient, factors_constant))
-    coefficient_values = list(coefficients.values())
     
     instructions = "To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have ("
-    for zero in possible_zeros:
-        if zero != possible_zeros[-1]:
-            instructions += f"{zero}, "
-        else:
-            instructions += f"{zero}) then use long division or synthetic division to divide them."
+    instructions += ", ".join(map(str, possible_zeros))
+    instructions += ") then use long division or synthetic division to divide them."
     solution.append(instructions)
     
     results = []
     results_unfiltered = []
+    coefficient_values = list(coefficients.values())
+    
     while len(coefficient_values) > 3:
         found_zero = False
         for zero in possible_zeros:
@@ -220,6 +218,8 @@ def solve_synthetic_division(equation):
     solution.append(results)
     
     return solution
+
+
 
 def solve_sum_diff_of_cubes(equation):
     left, right = equation.split('=')
