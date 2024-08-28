@@ -1,5 +1,6 @@
 from sympy import symbols, degree, Eq, solve, sympify,re
 import math
+import re
 from fractions import Fraction
 from decimal import Decimal, ROUND_HALF_UP
 from solve.solve_quadratic import (
@@ -157,7 +158,6 @@ def convert_to_fraction(x):
     else:
         return Fraction(x).limit_denominator()  
 
-
 def solve_synthetic_division(equation):
     solution = []
     
@@ -166,23 +166,20 @@ def solve_synthetic_division(equation):
     greatest_degree = max(coefficients.keys())
     leading_coefficient = coefficients[greatest_degree]
     constant = coefficients[0]
+    
     factors_leading_coefficient = array_factors_coefficient_list(leading_coefficient)
     factors_constant = array_factors_coefficient_list(constant)
     possible_zeros = sorted(determine_possible_zeros(factors_leading_coefficient, factors_constant))
-    coefficient_values = list(coefficients.values())
-    
     
     instructions = "To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have ("
-    
-    for zero in possible_zeros:
-        if zero != possible_zeros[-1]:
-            instructions += f"{zero}, "
-        else:
-            instructions += f"{zero}) then use long division or synthetic division to divide them."
+    instructions += ", ".join(map(str, possible_zeros))
+    instructions += ") then use long division or synthetic division to divide them."
     solution.append(instructions)
     
     results = []
     results_unfiltered = []
+    coefficient_values = list(coefficients.values())
+    
     while len(coefficient_values) > 3:
         found_zero = False
         for zero in possible_zeros:
@@ -190,50 +187,94 @@ def solve_synthetic_division(equation):
             if result[-1] == 0:
                 found_zero = True
                 results.append(f"{symbol}={convert_to_fraction(zero)}")
-                # Convert the coefficients and results to fractions before adding to the solution string
-                solution.append( f"{convert_to_fraction(zero)}|{' '.join(map(str, map(convert_to_fraction, coefficient_values)))} ===> {' '.join(map(str, map(convert_to_fraction, result[:-1])))} | {convert_to_fraction(result[-1])}")
-                coefficient_values = result
-                coefficient_values.pop()
+                solution.append(f"{convert_to_fraction(zero)}|{' '.join(map(str, map(convert_to_fraction, coefficient_values)))} ===> {' '.join(map(str, map(convert_to_fraction, result[:-1])))} | {convert_to_fraction(result[-1])}")
+                coefficient_values = result[:-1]  
                 break
         if not found_zero:
-            
             solution.append("No rational solution can be found. Brute forcing a solution.")
             left, right = equation.split("=")
-            results_unfiltered_non_numerical = solve(left,symbol)
-            results_unfiltered = [re(sol.evalf()) for sol in results_unfiltered_non_numerical]
+            results_unfiltered_non_numerical = solve(left, symbol)
+            results_unfiltered = [sol.evalf().as_real_imag()[0] for sol in results_unfiltered_non_numerical]
             break
-        
     
-    
-    if len(results_unfiltered) > 0:
+    if results_unfiltered:
         for result in results_unfiltered:
             if result.is_real is not None and result.is_real:
-                results.append(f"{symbol} = {round(result,2)}")
-        if results == []:
-            results.append("No real solutions")     
+                results.append(f"{symbol} = {round(result, 2)}")
+        if not results:
+            results.append("No real solutions")
     else:
         new_second_order_eq = put_second_order_back_together({2: coefficient_values[0], 1: coefficient_values[1], 0: coefficient_values[2]}, symbol)
         quad_sol = solve_quad_switch(new_second_order_eq)
         solution.append(quad_sol[0])
-    
-    
         if len(quad_sol[1]) > 1:
             if quad_sol[1][0] == quad_sol[1][1]:
                 results.append(quad_sol[1][0])
-            if "N" in quad_sol[1] and "o" in quad_sol[1]:
-                pass
-            else:
-                results.append(quad_sol[1][0])
-                results.append(quad_sol[1][1])
+            if "N" not in quad_sol[1] and "o" not in quad_sol[1]:
+                results.extend(quad_sol[1])
         else:
-            results.append(quad_sol[1][0])        
-            
-    
+            results.append(quad_sol[1][0])
     
     solution.append(results)
     
     return solution
 
+
+
 def solve_sum_diff_of_cubes(equation):
-    pass
+    left, right = equation.split('=')
+    symbol = find_symbol(equation)
+    coefficients = determine_coefficients_higher_order(equation, symbol)
+    solution = []
+    results = []
+    
+    third_order_cube_root = round(abs(coefficients[3]) ** (1/3))
+    constant_cube_root = round(abs(coefficients[0]) ** (1/3))
+    
+    
+    if "+" in left:
+        if third_order_cube_root == 1:
+            solution.append(f"Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> ({symbol} + {constant_cube_root})({symbol}**2 - {constant_cube_root}*{symbol} + {constant_cube_root**2})")
+            results.append(f'{symbol} = {-abs(constant_cube_root)}')
+        else:
+            solution.append(f"Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> ({third_order_cube_root}*{symbol} + {constant_cube_root})({third_order_cube_root**2}*{symbol}**2 - {constant_cube_root * third_order_cube_root}*{symbol} + {constant_cube_root**2})")
+            zero = convert_to_fraction(constant_cube_root/third_order_cube_root)
+            results.append(f'{symbol} = {-abs(zero)}')
+        
+        coefficients = {
+            2: third_order_cube_root**2,
+            1: -abs(third_order_cube_root * constant_cube_root),
+            0: constant_cube_root**2
+        }
+    elif "-" in left:
+        if third_order_cube_root == 1:
+            solution.append(f"Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> ({symbol} - {constant_cube_root})({symbol}**2 + {constant_cube_root}*{symbol} + {constant_cube_root**2})")
+            results.append(f'{symbol} = {abs(constant_cube_root)}')
+        else:
+            solution.append(f"Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> ({third_order_cube_root}*{symbol} - {constant_cube_root})({third_order_cube_root**2}*{symbol}**2 + {constant_cube_root * third_order_cube_root}*{symbol} + {constant_cube_root**2})")
+            zero = convert_to_fraction(constant_cube_root/third_order_cube_root)
+            results.append(f'{symbol} = {abs(zero)}')
+        
+        coefficients = {
+            2: third_order_cube_root**2,
+            1: abs(third_order_cube_root * constant_cube_root),
+            0: constant_cube_root**2
+        }
+        
+    new_second_order_eq = put_second_order_back_together(coefficients, symbol)
+    quad_sol = solve_quad_switch(new_second_order_eq)
+    solution.append(quad_sol[0])
+   
+    for sol in quad_sol[1]:
+        results.append(sol)
+    
+    solution.append(results)
+    return solution
+   
+            
+            
+    
+      
+        
+    
     
