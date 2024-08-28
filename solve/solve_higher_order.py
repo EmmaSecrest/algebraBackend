@@ -231,7 +231,6 @@ def solve_sum_diff_of_cubes(equation):
     third_order_cube_root = round(abs(coefficients[3]) ** (1/3))
     constant_cube_root = round(abs(coefficients[0]) ** (1/3))
     
-    
     if "+" in left:
         if third_order_cube_root == 1:
             solution.append(f"Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> ({symbol} + {constant_cube_root})({symbol}**2 - {constant_cube_root}*{symbol} + {constant_cube_root**2})")
@@ -265,8 +264,7 @@ def solve_sum_diff_of_cubes(equation):
     quad_sol = solve_quad_switch(new_second_order_eq)
     solution.append(quad_sol[0])
    
-    for sol in quad_sol[1]:
-        results.append(sol)
+    results.extend(quad_sol[1])
     
     solution.append(results)
     return solution
