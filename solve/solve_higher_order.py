@@ -282,6 +282,7 @@ def find_common_factor(equation,symbol):
     
     for i in range(len(coefficients_values) - 1, -1, -1):
         if coefficients_values[i] == 0:
+            
             greatest_degree_to_factor_out = coefficient_keys[i - 1]
             break
         
@@ -289,13 +290,9 @@ def find_common_factor(equation,symbol):
         coefficients_values.remove(0)
     
     factors_of_coefficients = [factor for value in coefficients_values for factor in array_factors_coefficient_list(value) if factor > 1]
-    print("Factors of Coefficients:", factors_of_coefficients)
     factor_counts = Counter(factors_of_coefficients)
-    print("Factor Counts:", factor_counts)
     common_factors = [factor for factor, count in factor_counts.items() if count == len(coefficients_values)]
-    print("length of coefficient values: ",len(coefficients_values) )
-    print("Common Factors:", common_factors)
-   
+    
     
     if common_factors:
         greatest_number_to_factor_out = max(common_factors)
