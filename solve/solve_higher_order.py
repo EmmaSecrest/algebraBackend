@@ -272,27 +272,24 @@ def solve_sum_diff_of_cubes(equation):
 
 def find_common_factor(equation,symbol):
     coefficients = determine_coefficients_higher_order(equation, symbol)
-    coefficients_values = list(coefficients.values())
+    coefficient_values = list(coefficients.values())
     coefficient_keys = list(coefficients.keys())
     greatest_degree_to_factor_out = 0
     greatest_number_to_factor_out = 1
     degree_string = ""
-    print(coefficients_values)
-   
     
-    for i in range(len(coefficients_values) - 1, -1, -1):
-        if coefficients_values[i] == 0:
-            
-            greatest_degree_to_factor_out = coefficient_keys[i - 1]
+    for i in range(len(coefficient_values)):
+        if coefficient_values[i] == 0 and all(value == 0 for value in coefficient_values[i:]):
+            greatest_degree_to_factor_out = coefficient_keys[i-1]
             break
-        
-    if 0 in coefficients_values:
-        coefficients_values.remove(0)
     
-    factors_of_coefficients = [factor for value in coefficients_values for factor in array_factors_coefficient_list(value) if factor > 1]
+    while 0 in coefficient_values:
+        coefficient_values.remove(0)
+    
+    
+    factors_of_coefficients = [factor for value in coefficient_values for factor in array_factors_coefficient_list(value) if factor > 1]
     factor_counts = Counter(factors_of_coefficients)
-    common_factors = [factor for factor, count in factor_counts.items() if count == len(coefficients_values)]
-    
+    common_factors = [factor for factor, count in factor_counts.items() if count == len(coefficient_values)]
     
     if common_factors:
         greatest_number_to_factor_out = max(common_factors)
@@ -302,13 +299,13 @@ def find_common_factor(equation,symbol):
     elif greatest_degree_to_factor_out > 1:
         degree_string = f"x**{greatest_degree_to_factor_out}"
         
-    print(greatest_degree_to_factor_out,greatest_number_to_factor_out)
-    
     if greatest_degree_to_factor_out == 0 and greatest_number_to_factor_out ==1:
         return 1
     else:
         if greatest_number_to_factor_out == 1:
             return degree_string
+        elif greatest_degree_to_factor_out == 0:
+            return greatest_number_to_factor_out
         else:
             return f"{greatest_number_to_factor_out}*{degree_string}"    
    
