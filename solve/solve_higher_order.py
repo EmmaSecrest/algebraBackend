@@ -268,6 +268,12 @@ def solve_sum_diff_of_cubes(equation):
     
     solution.append(results)
     return solution
+
+def find_common_factor(equation,symbol):
+    pass
+
+def split_factor_method(equation):
+    pass
    
             
             

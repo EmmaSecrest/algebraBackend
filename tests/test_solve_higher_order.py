@@ -12,7 +12,8 @@ from solve.solve_higher_order import (
     synthetic_division,
     convert_to_fraction,
     fraction_to_decimal,
-    solve_sum_diff_of_cubes
+    solve_sum_diff_of_cubes,
+    find_common_factor,
     )
 
 
@@ -109,7 +110,16 @@ class TestSumDiffOfCubes(TestCase):
         self.assertEqual(solve_sum_diff_of_cubes("64*x**3 - 1 = 0"), ["Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> (4*x - 1)(16*x**2 + 4*x + 1)","Use quadratic equation with a = 16, b = 4 and c = 1" ,['x = 1/4', "x = -1/8 - sqrt(3)*I/8", "x = -1/8 + sqrt(3)*I/8"]])
         self.assertEqual(solve_sum_diff_of_cubes("8*x**3 - 27 = 0"), ["Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> (2*x - 3)(4*x**2 + 6*x + 9)","Use quadratic equation with a = 4, b = 6 and c = 9" ,['x = 3/2', "x = -3/4 - 3*sqrt(3)*I/4", "x = -3/4 + 3*sqrt(3)*I/4"]])
         
-               
+class FindCommonFactor(TestCase):
+    def test_find_common_factor(self):
+        self.assertEqual(find_common_factor("x**3 + x**2 + x","x"),"x")
+        self.assertEqual(find_common_factor("2*x**3 + 4*x + 6","x"),2)
+        self.assertEqual(find_common_factor("2*x**3 - 4*x - 6","x"),2)    
+        self.assertEqual(find_common_factor("3*x**3 + 9*x**2 + 12*x","x"),"3*x")
+        self.assertEqual(find_common_factor("3*x**3 - 9*x**2 + 12*x","x"),"3*x")
+        self.assertEqual(find_common_factor("5*x**4 + 10*x**3 + 15*x**2","x"),"5*x**2")           
+        self.assertEqual(find_common_factor("3*x**3 + 2*x**2 + x - 1","x"),1)
+        
               
         
 if __name__ == '__main__':
