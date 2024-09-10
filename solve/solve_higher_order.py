@@ -1,6 +1,7 @@
 from sympy import symbols, degree, Eq, solve, sympify,re
 import math
 import re
+from collections import Counter
 from fractions import Fraction
 from decimal import Decimal, ROUND_HALF_UP
 from solve.solve_quadratic import (
@@ -270,7 +271,42 @@ def solve_sum_diff_of_cubes(equation):
     return solution
 
 def find_common_factor(equation,symbol):
-    pass
+    coefficients = determine_coefficients_higher_order(equation, symbol)
+    coefficients_values = list(coefficients.values())
+    coefficient_keys = list(coefficients.keys())
+    greatest_degree_to_factor_out = 0
+    greatest_number_to_factor_out = 1
+    degree_string = ""
+   
+    
+    for i in range(len(coefficients_values)):
+        if coefficients_values[i] == 0:
+            greatest_degree_to_factor_out = coefficient_keys[i-1]
+            break;
+    
+    factors_of_coefficients = [factor for value in coefficients_values for factor in array_factors_coefficient_list(value)]   
+    factor_counts = Counter(factors_of_coefficients)
+    common_factors = [factor for factor, count in factor_counts.items() if count == len(coefficients_values)]
+    if common_factors:
+        greatest_number_to_factor_out = max(common_factors)
+    
+    if greatest_degree_to_factor_out == 1:
+        degree_string = "x"
+    elif greatest_degree_to_factor_out > 1:
+        degree_string = f"x**{greatest_degree_to_factor_out}"
+    
+    if greatest_degree_to_factor_out == 0 and greatest_number_to_factor_out ==1:
+        return 1
+    else:
+        if greatest_number_to_factor_out == 1:
+            return degree_string
+        else:
+            return f"{greatest_number_to_factor_out}*{degree_string}"    
+   
+    
+     
+        
+    
 
 def split_factor_method(equation):
     pass
