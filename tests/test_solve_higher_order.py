@@ -120,7 +120,10 @@ class FindCommonFactor(TestCase):
         self.assertEqual(find_common_factor("5*x**4 + 10*x**3 + 15*x**2 = 0","x"),"5*x**2")           
         self.assertEqual(find_common_factor("3*x**3 + 2*x**2 + x - 1 = 0","x"),1)
         
-              
+#class TestSplitFactorMethod(TestCase):
+#     def test_split_factor_method(self):
+#         self.assertEqual(split_factor_method("2*x**2 +4*x + 2 = 0"))
+                      
         
 if __name__ == '__main__':
     main()

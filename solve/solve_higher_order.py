@@ -295,9 +295,9 @@ def find_common_factor(equation,symbol):
         greatest_number_to_factor_out = max(common_factors)
     
     if greatest_degree_to_factor_out == 1:
-        degree_string = "x"
+        degree_string = symbol
     elif greatest_degree_to_factor_out > 1:
-        degree_string = f"x**{greatest_degree_to_factor_out}"
+        degree_string = f"{symbol}**{greatest_degree_to_factor_out}"
         
     if greatest_degree_to_factor_out == 0 and greatest_number_to_factor_out ==1:
         return 1
