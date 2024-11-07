@@ -14,6 +14,7 @@ from solve.solve_higher_order import (
     fraction_to_decimal,
     solve_sum_diff_of_cubes,
     find_common_factor,
+    factor_common_term
     )
 
 
@@ -120,9 +121,13 @@ class FindCommonFactor(TestCase):
         self.assertEqual(find_common_factor("5*x**4 + 10*x**3 + 15*x**2 = 0","x"),"5*x**2")           
         self.assertEqual(find_common_factor("3*x**3 + 2*x**2 + x - 1 = 0","x"),1)
         
-#class TestSplitFactorMethod(TestCase):
-#     def test_split_factor_method(self):
-#         self.assertEqual(split_factor_method("2*x**2 +4*x + 2 = 0"))
+
+#TODO: add more tests cases after all higher order methods are covered
+class TestSplitFactorMethod(TestCase):
+    def test_factor_common_term(self):
+         self.assertEqual(factor_common_term("2*x**2 +4*x + 6 = 0"),["2(x**2 + 2*x + 3) = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ['x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
+         self.assertEqual(factor_common_term("x**3 + 2*x**2 + 3*x = 0"),["x(x**2 + 2*x + 3) = 0","x = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
+         self.assertEqual(factor_common_term("5*x**4 + 10*x**3 + 15*x**2 = 0"),["5*x**2(x**2 + 2*x + 3) = 0","5*x**2 = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
                       
         
 if __name__ == '__main__':

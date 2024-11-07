@@ -314,7 +314,7 @@ def find_common_factor(equation,symbol):
         
     
 
-def split_factor_method(equation):
+def factor_common_term(equation):
     pass
    
             
