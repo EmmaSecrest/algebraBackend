@@ -93,36 +93,52 @@ def determine_coefficients_higher_order(equation,symbol):
           
     return dict(sorted(coefficients.items(),reverse=True))             
             
-def put_second_order_back_together(coefficients, symbol):
+def put_higher_order_back_together(coefficients, symbol):
     equation = ""
-    for key, value in sorted(coefficients.items(), reverse=True):
-        if key == 0:
-            if value < 0:
-                equation += f"- {abs(value)} = 0"
-            else:
-                equation += f"+ {value} = 0"
-                
-        elif key == 2:
+    max_degree = max(coefficients.keys())
+
+    for key in sorted(coefficients.keys(), reverse=True):
+        value = coefficients[key]
+        if value == 0:
+            continue
+        if key == max_degree:
             if value == 1:
-                equation += f"{symbol}**2 " 
+                equation += f"{symbol}**{key} "
             elif value == -1:
-                equation += f"- {symbol}**2 "
+                equation += f"-{symbol}**{key} "
             else:
-                equation += f"{value}*{symbol}**2 "
-        
-        else:  # key == 1
-            if value == 0:
-                continue
-            elif value == 1:
+                equation += f"{value}*{symbol}**{key} "
+        elif key >= 2:
+            if value == 1:
+                equation += f"+ {symbol}**{key} "
+            elif value == -1:
+                equation += f"-{symbol}**{key} "
+            elif value < 0:
+                equation += f"- {abs(value)}*{symbol}**{key} "
+            else:
+                equation += f"+ {value}*{symbol}**{key} "
+        elif key == 1:
+            if value == 1:
                 equation += f"+ {symbol} "
             elif value == -1:
-                equation += f"- {symbol} "
+                equation += f"-{symbol} "
             elif value < 0:
                 equation += f"- {abs(value)}*{symbol} "
             else:
                 equation += f"+ {value}*{symbol} "
-           
-    return equation     
+        else:  # key == 0
+            if value < 0:
+                equation += f"- {abs(value)} = 0"
+            else:
+                equation += f"+ {value} = 0"
+
+    # Remove leading '+ ' if present
+    if equation.startswith('+ '):
+        equation = equation[2:]
+
+    return equation
+
+
         
 def determine_possible_zeros(leading_factors, constant_factors):
     possible_zeros = []
@@ -205,7 +221,7 @@ def solve_synthetic_division(equation):
         if not results:
             results.append("No real solutions")
     else:
-        new_second_order_eq = put_second_order_back_together({2: coefficient_values[0], 1: coefficient_values[1], 0: coefficient_values[2]}, symbol)
+        new_second_order_eq = put_higher_order_back_together({2: coefficient_values[0], 1: coefficient_values[1], 0: coefficient_values[2]}, symbol)
         quad_sol = solve_quad_switch(new_second_order_eq)
         solution.append(quad_sol[0])
         if len(quad_sol[1]) > 1:
@@ -261,7 +277,7 @@ def solve_sum_diff_of_cubes(equation):
             0: constant_cube_root**2
         }
         
-    new_second_order_eq = put_second_order_back_together(coefficients, symbol)
+    new_second_order_eq = put_higher_order_back_together(coefficients, symbol)
     quad_sol = solve_quad_switch(new_second_order_eq)
     solution.append(quad_sol[0])
    
@@ -273,14 +289,14 @@ def solve_sum_diff_of_cubes(equation):
 def find_common_factor(equation,symbol):
     coefficients = determine_coefficients_higher_order(equation, symbol)
     coefficient_values = list(coefficients.values())
-    coefficient_keys = list(coefficients.keys())
+    coefficient_powers = list(coefficients.keys())
     greatest_degree_to_factor_out = 0
     greatest_number_to_factor_out = 1
     degree_string = ""
     
     for i in range(len(coefficient_values)):
         if coefficient_values[i] == 0 and all(value == 0 for value in coefficient_values[i:]):
-            greatest_degree_to_factor_out = coefficient_keys[i-1]
+            greatest_degree_to_factor_out = coefficient_powers[i-1]
             break
     
     while 0 in coefficient_values:
@@ -310,12 +326,30 @@ def find_common_factor(equation,symbol):
             return f"{greatest_number_to_factor_out}*{degree_string}"    
    
     
-     
+def factor_common_term(equation):
+    symbol = find_symbol(equation)
+    common_factor = find_common_factor(equation,symbol)
+    coefficients = determine_coefficients_higher_order(equation,symbol)
+    coefficient_values = list(coefficients.values())
+    coefficients_powers = list(coefficients.keys())
+
+    
+    if not isinstance(common_factor,int) and "*" in common_factor:
+        common_factor_split = common_factor.split("*")
+        common_factor_split = [i for i in common_factor_split if i !='']
+    
+    if isinstance(common_factor,int):
+        new_coefficients = [int(v/common_factor) for v in coefficients.values()]
+        print(new_coefficients)
+        
+        
         
     
-
-def factor_common_term(equation):
-    pass
+    
+    
+    
+    
+        
    
             
             
