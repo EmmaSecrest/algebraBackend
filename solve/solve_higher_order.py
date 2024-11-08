@@ -332,6 +332,9 @@ def factor_common_term(equation):
     coefficients = determine_coefficients_higher_order(equation,symbol)
     coefficient_values = list(coefficients.values())
     coefficients_powers = list(coefficients.keys())
+    new_equation = ""
+    solution = []
+    results = []
 
     
     if not isinstance(common_factor,int) and "*" in common_factor:
@@ -339,8 +342,20 @@ def factor_common_term(equation):
         common_factor_split = [i for i in common_factor_split if i !='']
     
     if isinstance(common_factor,int):
-        new_coefficients = [int(v/common_factor) for v in coefficients.values()]
-        print(new_coefficients)
+        new_coefficients = [int(v/common_factor) for v in coefficient_values]
+        new_coefficients_dict = dict(zip(coefficients_powers,new_coefficients))
+        new_equation = put_higher_order_back_together(new_coefficients_dict,symbol)
+    
+    new_expression = new_equation.split("=")[0]    
+    solution.append(f"{common_factor}({new_expression}) = 0")
+    results.append("x = 0")
+    
+    # second step if quadratic plug into solve quadratic
+    # TODO: if higher level come back to this function after all other methods are programmed and there is a switch method
+    
+    print(solution)
+    print(results)
+        
         
         
         
