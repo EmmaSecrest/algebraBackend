@@ -327,6 +327,7 @@ def factor_common_term(equation):
     solution = []
     results = []
 
+    #TODO: add logic for common factor being a variable and for it being a int and a variable
     
     if not isinstance(common_factor,int) and "*" in common_factor:
         common_factor_split = common_factor.split("*")
