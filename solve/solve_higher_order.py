@@ -47,7 +47,6 @@ def solve_quad_switch(equation):
         return solve_quad_factor(equation)
     else:
         return solve_quad_no_factor(equation)
-    
 
 def fraction_to_decimal(fraction_str):
     if fraction_str.lstrip('-').isdigit():
@@ -56,8 +55,7 @@ def fraction_to_decimal(fraction_str):
         numerator, denominator = map(int, fraction_str.split('/'))
         decimal = Decimal(numerator) / Decimal(denominator)
         return float(decimal.quantize(Decimal('0.00'), rounding=ROUND_HALF_UP))
-   
-    
+
 def determine_coefficients_higher_order(equation,symbol):
     terms = splitting_terms(equation)
     coefficients = {}
@@ -92,7 +90,7 @@ def determine_coefficients_higher_order(equation,symbol):
             coefficients[i] = 0
           
     return dict(sorted(coefficients.items(),reverse=True))             
-            
+
 def put_higher_order_back_together(coefficients, symbol):
     equation = ""
     max_degree = max(coefficients.keys())
@@ -139,7 +137,6 @@ def put_higher_order_back_together(coefficients, symbol):
     return equation
 
 
-        
 def determine_possible_zeros(leading_factors, constant_factors):
     possible_zeros = []
     for leading in leading_factors:
@@ -152,9 +149,7 @@ def determine_possible_zeros(leading_factors, constant_factors):
                 possible_zeros.append(possible_zero)
             
     return possible_zeros
-            
-            
-            
+
 def synthetic_division(coefficients,zero):
     results = []
     
@@ -167,7 +162,6 @@ def synthetic_division(coefficients,zero):
         i += 1
     
     return results
-    
 
 def convert_to_fraction(x):
     if x % 1 == 0:
@@ -235,8 +229,6 @@ def solve_synthetic_division(equation):
     solution.append(results)
     
     return solution
-
-
 
 def solve_sum_diff_of_cubes(equation):
     left, right = equation.split('=')
@@ -324,8 +316,7 @@ def find_common_factor(equation,symbol):
             return greatest_number_to_factor_out
         else:
             return f"{greatest_number_to_factor_out}*{degree_string}"    
-   
-    
+
 def factor_common_term(equation):
     symbol = find_symbol(equation)
     common_factor = find_common_factor(equation,symbol)
@@ -346,30 +337,27 @@ def factor_common_term(equation):
         new_coefficients_dict = dict(zip(coefficients_powers,new_coefficients))
         new_equation = put_higher_order_back_together(new_coefficients_dict,symbol)
     
-    new_expression = new_equation.split("=")[0]    
+    new_expression = new_equation.split("=")[0].rstrip(" )")  
     solution.append(f"{common_factor}({new_expression}) = 0")
     results.append("x = 0")
     
-    # second step if quadratic plug into solve quadratic
-    # TODO: if higher level come back to this function after all other methods are programmed and there is a switch method
+    print("new equation:" ,new_equation)
+    print("symbol: ", symbol)
+    new_equation_degree = find_degree(new_equation,symbol)
     
-    print(solution)
-    print(results)
+    if new_equation_degree == 2:
+        quad_sol = solve_quad_switch(new_equation)
+        old_quad_sol = quad_sol[0]
+        quad_sol[0]= f"For the equation {new_equation} : {old_quad_sol}"
+        solution.append(quad_sol[0])
+        results.extend(quad_sol[1])
         
-        
-        
-        
+    else:
+        # TODO: if higher level come back to this function after all other methods are programmed and there is a switch method
+        print("come back to this function")
+    
+    solution.append(results)
     
     
-    
-    
-    
-        
-   
-            
-            
-    
-      
-        
-    
-    
+    return solution
+
