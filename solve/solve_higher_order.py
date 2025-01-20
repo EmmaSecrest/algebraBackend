@@ -317,7 +317,7 @@ def find_common_factor(equation,symbol):
         else:
             return f"{greatest_number_to_factor_out}*{degree_string}"    
 
-def factor_common_term(equation):
+def factor_common_term_eq(equation):
     symbol = find_symbol(equation)
     common_factor = find_common_factor(equation,symbol)
     coefficients = determine_coefficients_higher_order(equation,symbol)
