@@ -340,11 +340,11 @@ def factor_common_term(equation):
         new_powers_dict = dict(zip(new_powers,coefficient_values))
         new_equation = put_higher_order_back_together(new_powers_dict,symbol)
         
-    elif re.fullmatch(common_factor,"^[a-zA-Z](\*\*\d+)?$ "): #x**2
+    elif re.fullmatch(common_factor, r"^[a-zA-Z]\*{2}\d"): #x**2
         print("common factor",common_factor)
-    elif re.fullmatch(common_factor,"^\d\*[a-zA-Z](\*\*\d+)?$"): #5*x
+    elif re.fullmatch(common_factor,r"^\d\*[a-zA-Z](\*\*\d+)?$"): #5*x
          print("common factor",common_factor)
-    elif re.fullmatch(common_factor,"^\d\*[a-zA-Z]\*{2}\d"): #5*x**2
+    elif re.fullmatch(common_factor,r"^\d\*[a-zA-Z]\*{2}\d"): #5*x**2
          print("common factor",common_factor)
     
    
