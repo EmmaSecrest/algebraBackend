@@ -329,23 +329,26 @@ def factor_common_term(equation):
 
     #TODO: add logic for common factor being a variable and for it being a int and a variable
     
-    print("common factor",common_factor)
-    if isinstance(common_factor,int):
-        new_coefficients = [int(v/common_factor) for v in coefficient_values]
-        new_coefficients_dict = dict(zip(coefficients_powers,new_coefficients))
-        new_equation = put_higher_order_back_together(new_coefficients_dict,symbol)
+    print("common factor", common_factor)
+    if isinstance(common_factor, int):
+        new_coefficients = [int(v / common_factor) for v in coefficient_values]
+        new_coefficients_dict = dict(zip(coefficients_powers, new_coefficients))
+        new_equation = put_higher_order_back_together(new_coefficients_dict, symbol)
     elif symbol == common_factor:
-        print("common factor: ",common_factor)
         new_powers = [int(p - 1) for p in coefficients_powers]
-        new_powers_dict = dict(zip(new_powers,coefficient_values))
-        new_equation = put_higher_order_back_together(new_powers_dict,symbol)
-        
-    elif re.fullmatch(common_factor, r"^[a-zA-Z]\*{2}\d"): #x**2
-        print("common factor",common_factor)
-    elif re.fullmatch(common_factor,r"^\d\*[a-zA-Z](\*\*\d+)?$"): #5*x
-         print("common factor",common_factor)
-    elif re.fullmatch(common_factor,r"^\d\*[a-zA-Z]\*{2}\d"): #5*x**2
-         print("common factor",common_factor)
+        new_powers_dict = dict(zip(new_powers, coefficient_values))
+        new_equation = put_higher_order_back_together(new_powers_dict, symbol)
+    elif re.fullmatch(r"^[a-zA-Z]\*\*\d$", common_factor):  # x**2
+        print("common factor", common_factor)
+        power_to_subtract = int(re.search(r"\d+$", common_factor).group())
+        new_powers = [int(p - power_to_subtract) for p in coefficients_powers]
+        new_powers_dict = dict(zip(new_powers, coefficient_values))
+        new_equation = put_higher_order_back_together(new_powers_dict, symbol)
+    
+    elif re.fullmatch(r"^\d\*[a-zA-Z](\*\*\d+)?$", common_factor):  # 5*x
+        print("common factor", common_factor)
+    elif re.fullmatch(r"^\d\*[a-zA-Z]\*\*\d$", common_factor):  # 5*x**2
+        print("common factor", common_factor)
     
    
 
