@@ -329,7 +329,7 @@ def factor_common_term(equation):
 
     #TODO: add logic for common factor being a variable and for it being a int and a variable
     
-    
+    print("common factor",common_factor)
     if isinstance(common_factor,int):
         new_coefficients = [int(v/common_factor) for v in coefficient_values]
         new_coefficients_dict = dict(zip(coefficients_powers,new_coefficients))
@@ -341,11 +341,11 @@ def factor_common_term(equation):
         new_equation = put_higher_order_back_together(new_powers_dict,symbol)
         
     elif re.fullmatch(common_factor,"^[a-zA-Z](\*\*\d+)?$ "): #x**2
-        print(common_factor)
+        print("common factor",common_factor)
     elif re.fullmatch(common_factor,"^\d\*[a-zA-Z](\*\*\d+)?$"): #5*x
-        print(common_factor)
+         print("common factor",common_factor)
     elif re.fullmatch(common_factor,"^\d\*[a-zA-Z]\*{2}\d"): #5*x**2
-        print(common_factor)
+         print("common factor",common_factor)
     
    
 
