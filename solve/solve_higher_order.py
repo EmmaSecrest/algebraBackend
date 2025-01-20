@@ -329,7 +329,6 @@ def factor_common_term(equation):
 
     #TODO: add logic for common factor being a variable and for it being a int and a variable
     
-    print("common factor", common_factor)
     if isinstance(common_factor, int):
         new_coefficients = [int(v / common_factor) for v in coefficient_values]
         new_coefficients_dict = dict(zip(coefficients_powers, new_coefficients))
@@ -339,16 +338,24 @@ def factor_common_term(equation):
         new_powers_dict = dict(zip(new_powers, coefficient_values))
         new_equation = put_higher_order_back_together(new_powers_dict, symbol)
     elif re.fullmatch(r"^[a-zA-Z]\*\*\d$", common_factor):  # x**2
-        print("common factor", common_factor)
         power_to_subtract = int(re.search(r"\d+$", common_factor).group())
         new_powers = [int(p - power_to_subtract) for p in coefficients_powers]
         new_powers_dict = dict(zip(new_powers, coefficient_values))
         new_equation = put_higher_order_back_together(new_powers_dict, symbol)
-    
-    elif re.fullmatch(r"^\d\*[a-zA-Z](\*\*\d+)?$", common_factor):  # 5*x
-        print("common factor", common_factor)
+    elif re.fullmatch(r"^\d\*[a-zA-Z]$", common_factor):  # 5*x
+        
+        new_powers = [int(p - 1) for p in coefficients_powers]
+        coeff_to_divide = int(re.search(r"^\d", common_factor).group())
+        new_coefficients = [int(v / coeff_to_divide) for v in coefficient_values]
+        new_coefficients_dict = dict(zip(new_powers, new_coefficients))
+        new_equation = put_higher_order_back_together(new_coefficients_dict, symbol)
     elif re.fullmatch(r"^\d\*[a-zA-Z]\*\*\d$", common_factor):  # 5*x**2
-        print("common factor", common_factor)
+        coeff_to_divide = int(re.search(r"^\d", common_factor).group())
+        power_to_subtract = int(re.search(r"\d+$", common_factor).group())
+        new_powers = [int(p - power_to_subtract) for p in coefficients_powers]
+        new_coefficients = [int(v / coeff_to_divide) for v in coefficient_values]
+        new_coefficients_dict = dict(zip(new_powers, new_coefficients))
+        new_equation = put_higher_order_back_together(new_coefficients_dict, symbol)
     
    
 
@@ -357,10 +364,10 @@ def factor_common_term(equation):
     
     new_expression = new_equation.split("=")[0].rstrip(" )")  
     solution.append(f"{common_factor}({new_expression}) = 0")
+    if not isinstance(common_factor, int):
+        solution.append(f"{common_factor} = 0")
     results.append("x = 0")
     
-    print("new equation:" ,new_equation)
-    print("symbol: ", symbol)
     new_equation_degree = find_degree(new_equation,symbol)
     
     if new_equation_degree == 2:
@@ -374,8 +381,7 @@ def factor_common_term(equation):
         # TODO: if higher level come back to this function after all other methods are programmed and there is a switch method
         print("come back to this function")
     
+    solution
     solution.append(results)
-    
-    print("solution: ",solution)
     return solution
 

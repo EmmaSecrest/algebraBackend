@@ -127,11 +127,11 @@ class FindCommonFactor(TestCase):
 #TODO: get one in here that factors out a common term
 class TestSplitFactorMethod(TestCase):
     def test_factor_common_term(self):
-         #self.assertEqual(factor_common_term("2*x**2 + 4*x + 6 = 0"),["2(x**2 + 2*x + 3) = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
-        #self.assertEqual(factor_common_term("x**3 + 2*x**2 + 3*x = 0"),["x(x**2 + 2*x + 3) = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
-        self.assertEqual(factor_common_term("x**4 + 2*x**3 + 3*x**2 = 0"),["x**2(x**2 + 2*x + 3) = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
-        #self.assertEqual(factor_common_term("3*x**3 + 6*x**2 + 9*x = 0"),["3*x(x**2 + 2*x + 3) = 0","3*x = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
-        #self.assertEqual(factor_common_term("5*x**4 + 10*x**3 + 15*x**2 = 0"),["5*x**2(x**2 + 2*x + 3) = 0","5*x**2 = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
+        self.assertEqual(factor_common_term("2*x**2 + 4*x + 6 = 0"),["2(x**2 + 2*x + 3) = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
+        self.assertEqual(factor_common_term("x**3 + 2*x**2 + 3*x = 0"),["x(x**2 + 2*x + 3) = 0","x = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
+        self.assertEqual(factor_common_term("x**4 + 2*x**3 + 3*x**2 = 0"),["x**2(x**2 + 2*x + 3) = 0","x**2 = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
+        self.assertEqual(factor_common_term("3*x**3 + 6*x**2 + 9*x = 0"),["3*x(x**2 + 2*x + 3) = 0","3*x = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
+        self.assertEqual(factor_common_term("5*x**4 + 10*x**3 + 15*x**2 = 0"),["5*x**2(x**2 + 2*x + 3) = 0","5*x**2 = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
                       
         
 if __name__ == '__main__':
