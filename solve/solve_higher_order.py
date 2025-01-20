@@ -1,6 +1,7 @@
 from sympy import symbols, degree, Eq, solve, sympify,re
 import math
 import re
+from collections import Counter
 from fractions import Fraction
 from decimal import Decimal, ROUND_HALF_UP
 from solve.solve_quadratic import (
@@ -46,7 +47,6 @@ def solve_quad_switch(equation):
         return solve_quad_factor(equation)
     else:
         return solve_quad_no_factor(equation)
-    
 
 def fraction_to_decimal(fraction_str):
     if fraction_str.lstrip('-').isdigit():
@@ -55,8 +55,7 @@ def fraction_to_decimal(fraction_str):
         numerator, denominator = map(int, fraction_str.split('/'))
         decimal = Decimal(numerator) / Decimal(denominator)
         return float(decimal.quantize(Decimal('0.00'), rounding=ROUND_HALF_UP))
-   
-    
+
 def determine_coefficients_higher_order(equation,symbol):
     terms = splitting_terms(equation)
     coefficients = {}
@@ -91,38 +90,53 @@ def determine_coefficients_higher_order(equation,symbol):
             coefficients[i] = 0
           
     return dict(sorted(coefficients.items(),reverse=True))             
-            
-def put_second_order_back_together(coefficients, symbol):
+
+def put_higher_order_back_together(coefficients, symbol):
     equation = ""
-    for key, value in sorted(coefficients.items(), reverse=True):
-        if key == 0:
-            if value < 0:
-                equation += f"- {abs(value)} = 0"
-            else:
-                equation += f"+ {value} = 0"
-                
-        elif key == 2:
+    max_degree = max(coefficients.keys())
+
+    for key in sorted(coefficients.keys(), reverse=True):
+        value = coefficients[key]
+        if value == 0:
+            continue
+        if key == max_degree:
             if value == 1:
-                equation += f"{symbol}**2 " 
+                equation += f"{symbol}**{key} "
             elif value == -1:
-                equation += f"- {symbol}**2 "
+                equation += f"-{symbol}**{key} "
             else:
-                equation += f"{value}*{symbol}**2 "
-        
-        else:  # key == 1
-            if value == 0:
-                continue
-            elif value == 1:
+                equation += f"{value}*{symbol}**{key} "
+        elif key >= 2:
+            if value == 1:
+                equation += f"+ {symbol}**{key} "
+            elif value == -1:
+                equation += f"-{symbol}**{key} "
+            elif value < 0:
+                equation += f"- {abs(value)}*{symbol}**{key} "
+            else:
+                equation += f"+ {value}*{symbol}**{key} "
+        elif key == 1:
+            if value == 1:
                 equation += f"+ {symbol} "
             elif value == -1:
-                equation += f"- {symbol} "
+                equation += f"-{symbol} "
             elif value < 0:
                 equation += f"- {abs(value)}*{symbol} "
             else:
                 equation += f"+ {value}*{symbol} "
-           
-    return equation     
-        
+        else:  # key == 0
+            if value < 0:
+                equation += f"- {abs(value)} = 0"
+            else:
+                equation += f"+ {value} = 0"
+
+    # Remove leading '+ ' if present
+    if equation.startswith('+ '):
+        equation = equation[2:]
+
+    return equation
+
+
 def determine_possible_zeros(leading_factors, constant_factors):
     possible_zeros = []
     for leading in leading_factors:
@@ -135,9 +149,7 @@ def determine_possible_zeros(leading_factors, constant_factors):
                 possible_zeros.append(possible_zero)
             
     return possible_zeros
-            
-            
-            
+
 def synthetic_division(coefficients,zero):
     results = []
     
@@ -150,7 +162,6 @@ def synthetic_division(coefficients,zero):
         i += 1
     
     return results
-    
 
 def convert_to_fraction(x):
     if x % 1 == 0:
@@ -204,7 +215,7 @@ def solve_synthetic_division(equation):
         if not results:
             results.append("No real solutions")
     else:
-        new_second_order_eq = put_second_order_back_together({2: coefficient_values[0], 1: coefficient_values[1], 0: coefficient_values[2]}, symbol)
+        new_second_order_eq = put_higher_order_back_together({2: coefficient_values[0], 1: coefficient_values[1], 0: coefficient_values[2]}, symbol)
         quad_sol = solve_quad_switch(new_second_order_eq)
         solution.append(quad_sol[0])
         if len(quad_sol[1]) > 1:
@@ -218,8 +229,6 @@ def solve_synthetic_division(equation):
     solution.append(results)
     
     return solution
-
-
 
 def solve_sum_diff_of_cubes(equation):
     left, right = equation.split('=')
@@ -260,7 +269,7 @@ def solve_sum_diff_of_cubes(equation):
             0: constant_cube_root**2
         }
         
-    new_second_order_eq = put_second_order_back_together(coefficients, symbol)
+    new_second_order_eq = put_higher_order_back_together(coefficients, symbol)
     quad_sol = solve_quad_switch(new_second_order_eq)
     solution.append(quad_sol[0])
    
@@ -268,11 +277,111 @@ def solve_sum_diff_of_cubes(equation):
     
     solution.append(results)
     return solution
-   
-            
-            
+
+def find_common_factor(equation,symbol):
+    coefficients = determine_coefficients_higher_order(equation, symbol)
+    coefficient_values = list(coefficients.values())
+    coefficient_powers = list(coefficients.keys())
+    greatest_degree_to_factor_out = 0
+    greatest_number_to_factor_out = 1
+    degree_string = ""
     
-      
+    for i in range(len(coefficient_values)):
+        if coefficient_values[i] == 0 and all(value == 0 for value in coefficient_values[i:]):
+            greatest_degree_to_factor_out = coefficient_powers[i-1]
+            break
+    
+    while 0 in coefficient_values:
+        coefficient_values.remove(0)
+    
+    
+    factors_of_coefficients = [factor for value in coefficient_values for factor in array_factors_coefficient_list(value) if factor > 1]
+    factor_counts = Counter(factors_of_coefficients)
+    common_factors = [factor for factor, count in factor_counts.items() if count == len(coefficient_values)]
+    
+    if common_factors:
+        greatest_number_to_factor_out = max(common_factors)
+    
+    if greatest_degree_to_factor_out == 1:
+        degree_string = symbol
+    elif greatest_degree_to_factor_out > 1:
+        degree_string = f"{symbol}**{greatest_degree_to_factor_out}"
         
+    if greatest_degree_to_factor_out == 0 and greatest_number_to_factor_out ==1:
+        return 1
+    else:
+        if greatest_number_to_factor_out == 1:
+            return degree_string
+        elif greatest_degree_to_factor_out == 0:
+            return greatest_number_to_factor_out
+        else:
+            return f"{greatest_number_to_factor_out}*{degree_string}"    
+
+def factor_common_term(equation):
+    symbol = find_symbol(equation)
+    common_factor = find_common_factor(equation,symbol)
+    coefficients = determine_coefficients_higher_order(equation,symbol)
+    coefficient_values = list(coefficients.values())
+    coefficients_powers = list(coefficients.keys())
+    new_equation = ""
+    solution = []
+    results = []
+
+    #TODO: add logic for common factor being a variable and for it being a int and a variable
+    
+    if isinstance(common_factor, int):
+        new_coefficients = [int(v / common_factor) for v in coefficient_values]
+        new_coefficients_dict = dict(zip(coefficients_powers, new_coefficients))
+        new_equation = put_higher_order_back_together(new_coefficients_dict, symbol)
+    elif symbol == common_factor:
+        new_powers = [int(p - 1) for p in coefficients_powers]
+        new_powers_dict = dict(zip(new_powers, coefficient_values))
+        new_equation = put_higher_order_back_together(new_powers_dict, symbol)
+    elif re.fullmatch(r"^[a-zA-Z]\*\*\d$", common_factor):  # x**2
+        power_to_subtract = int(re.search(r"\d+$", common_factor).group())
+        new_powers = [int(p - power_to_subtract) for p in coefficients_powers]
+        new_powers_dict = dict(zip(new_powers, coefficient_values))
+        new_equation = put_higher_order_back_together(new_powers_dict, symbol)
+    elif re.fullmatch(r"^\d\*[a-zA-Z]$", common_factor):  # 5*x
+        
+        new_powers = [int(p - 1) for p in coefficients_powers]
+        coeff_to_divide = int(re.search(r"^\d", common_factor).group())
+        new_coefficients = [int(v / coeff_to_divide) for v in coefficient_values]
+        new_coefficients_dict = dict(zip(new_powers, new_coefficients))
+        new_equation = put_higher_order_back_together(new_coefficients_dict, symbol)
+    elif re.fullmatch(r"^\d\*[a-zA-Z]\*\*\d$", common_factor):  # 5*x**2
+        coeff_to_divide = int(re.search(r"^\d", common_factor).group())
+        power_to_subtract = int(re.search(r"\d+$", common_factor).group())
+        new_powers = [int(p - power_to_subtract) for p in coefficients_powers]
+        new_coefficients = [int(v / coeff_to_divide) for v in coefficient_values]
+        new_coefficients_dict = dict(zip(new_powers, new_coefficients))
+        new_equation = put_higher_order_back_together(new_coefficients_dict, symbol)
+    
+   
+
+
     
     
+    new_expression = new_equation.split("=")[0].rstrip(" )")  
+    solution.append(f"{common_factor}({new_expression}) = 0")
+    if not isinstance(common_factor, int):
+        solution.append(f"{common_factor} = 0")
+    results.append("x = 0")
+    
+    new_equation_degree = find_degree(new_equation,symbol)
+    
+    if new_equation_degree == 2:
+        quad_sol = solve_quad_switch(new_equation)
+        old_quad_sol = quad_sol[0]
+        quad_sol[0]= f"For the equation {new_equation} : {old_quad_sol}"
+        solution.append(quad_sol[0])
+        results.extend(quad_sol[1])
+        
+    else:
+        # TODO: if higher level come back to this function after all other methods are programmed and there is a switch method
+        print("come back to this function")
+    
+    solution
+    solution.append(results)
+    return solution
+
