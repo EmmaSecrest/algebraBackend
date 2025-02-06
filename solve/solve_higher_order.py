@@ -385,3 +385,5 @@ def factor_common_term_eq(equation):
     solution.append(results)
     return solution
 
+def higherQuadraticFactor(equation):
+    pass

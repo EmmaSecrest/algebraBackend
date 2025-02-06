@@ -14,7 +14,8 @@ from solve.solve_higher_order import (
     fraction_to_decimal,
     solve_sum_diff_of_cubes,
     find_common_factor,
-    factor_common_term_eq
+    factor_common_term_eq,
+    higherQuadraticFactor
     )
 
 
@@ -132,7 +133,17 @@ class TestSplitFactorMethod(TestCase):
         self.assertEqual(factor_common_term_eq("x**4 + 2*x**3 + 3*x**2 = 0"),["x**2(x**2 + 2*x + 3) = 0","x**2 = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
         self.assertEqual(factor_common_term_eq("3*x**3 + 6*x**2 + 9*x = 0"),["3*x(x**2 + 2*x + 3) = 0","3*x = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
         self.assertEqual(factor_common_term_eq("5*x**4 + 10*x**3 + 15*x**2 = 0"),["5*x**2(x**2 + 2*x + 3) = 0","5*x**2 = 0","For the equation x**2 + 2*x + 3 = 0 : Use quadratic equation with a = 1, b = 2 and c = 3", ["x = 0",'x = -1 - sqrt(2)*I', 'x = -1 + sqrt(2)*I']])
-                      
+
+class higherQuadraticFactor(TestCase):
+    def test_higher_quadratic_factor(self):
+        self.assertEqual(higherQuadraticFactor("x**4 + 3*x**2 + 2 = 0"),["(x**2 + 1)(x**2 + 2) = 0", "For the equation x**2 + 1 = 0 : Use quadratic equation with a = 1, b = 0 and c = 1. This gives us [x = -1*I, x = 1*I] ","For the equation x**2 + 2 = 0 : Use quadratic equation with a = 1, b = 0 and c = 2. This gives us [x = -sqrt(2)*I, x = sqrt(2)*I]", ["x = -1*I", "x = 1*I","x = -sqrt(2)*I", "x = sqrt(2)*I"]])
+        self.assertEqual(higherQuadraticFactor("3*x**4 - 7*x**2 + 2 = 0"),["(3*x**2 - 1)(x**2 + 2) = 0", "For the equation 3*x**2 - 1 = 0 : Use quadratic equation with a = 3, b = 0 and c = -1. This gives us [x = -1/3*sqrt(3)*I, x = 1/3*sqrt(3)*I] ","For the equation x**2 + 2 = 0 : Use quadratic equation with a = 1, b = 0 and c = 2. This gives us [x = -sqrt(2)*I, x = sqrt(2)*I]", ["x = -1/3*sqrt(3)*I", "x = 1/3*sqrt(3)*I","x = -sqrt(2)*I", "x = sqrt(2)*I"]])
+        self.assertEqual(higherQuadraticFactor("x**4 - 4 = 0"),["(x**2 - 2)(x**2 + 2) = 0", "For the equation x**2 - 2 = 0 : Use quadratic equation with a = 1, b = 0 and c = -2. This gives us [x = -sqrt(2), x = sqrt(2)] ","For the equation x**2 + 2 = 0 : Use quadratic equation with a = 1, b = 0 and c = 2. This gives us [x = -sqrt(2)*I, x = sqrt(2)*I]", ["x = -sqrt(2)", "x = sqrt(2)","x = -sqrt(2)*I", "x = sqrt(2)*I"]])
+        self.assertEqual(higherQuadraticFactor("x**6 + 2*x**3 + 1 = 0"),["(x**3 + 1)(x**3 + 1) = 0", "For the equation x**3 + 1 = 0: To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-1, 1) then use long division or synthetic division to divide them. This gives us [x = -1, x = -1/2 + sqrt(3)*I/2, x = -1/2 - sqrt(3)*I/2] ", "For the equation x**3 + 1 = 0: To get the possible zeros take the factors of the constant and then divide them by the factors of the leading coefficient in this case we have (-1, 1) then use long division or synthetic division to divide them. This gives us [x = -1, x = -1/2 + sqrt(3)*I/2, x = -1/2 - sqrt(3)*I/2]", ["x = -1", "x = -1/2 + sqrt(3)*I/2", "x = -1/2 - sqrt(3)*I/2"]])
+        self.assertEqual(higherQuadraticFactor("x**6 - 64 = 0"),["(x**3 - 4)(x**3 + 4) = 0","For x**3 - 4 = 0:Use the difference of cubes equation: (a*x - b)(a**2*x**2 + a*b*x + b**2) ===> (x - 4)(x**2 + 4*x + 16) This gives us [x = 4, x = -2 + 2*sqrt(3)*I, x = -2 - 2*sqrt(3)*I]","For x**3 + 4 = 0:Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> (x + 4)(x**2 - 4*x + 16) This gives us [x = -4, x = 2 + 2*sqrt(3)*I, x = 2 - 2*sqrt(3)*I]", ["x = 4", "x = -2 + 2*sqrt(3)*I", "x = -2 - 2*sqrt(3)*I", "x = -4", "x = 2 + 2*sqrt(3)*I", "x = 2 - 2*sqrt(3)*I"]])
+        self.assertEqual(higherQuadraticFactor("x**6 + 16*x**3 + 64 = 0"),["(x**3 + 4)(x**3 + 4) = 0","For x**3 + 4 = 0:Use the sum of cubes equation: (a*x + b)(a**2*x**2 - a*b*x + b**2) ===> (x + 4)(x**2 - 4*x + 16) This gives us [x = -4, x = 2 + 2*sqrt(3)*I, x = 2 - 2*sqrt(3)*I]", ["x = -4", "x = 2 + 2*sqrt(3)*I", "x = 2 - 2*sqrt(3)*I"]])
+        #TODO: after this is complete see if recursion is an option for 8th power and beyond else just use synthetic division
+        
         
 if __name__ == '__main__':
     main()

@@ -1,4 +1,4 @@
-#to run tests use python -m unittest discover
+#to run tests use   
 from unittest import TestCase, main
 
 
