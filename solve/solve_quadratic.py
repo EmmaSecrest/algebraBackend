@@ -240,9 +240,9 @@ def solve_non_zero_c(A, B, c, symbol, factors_a, factors_c):
     return result
 
 def generate_factored_equation(a, b, d, e, symbol, power=1):
-    part1 = f"{a if a != 1 else ''}{symbol}^{power}" if a != 0 else ''
+    part1 = f"{a if a != 1 else ''}{symbol}**{power}" if a != 0 else ''
     part2 = f" {'+' if d >= 0 else '-'} {abs(d)}" if d != 0 else ''
-    part3 = f"{b if b != 1 else ''}{symbol}^{power}" if b != 0 else ''
+    part3 = f"{b if b != 1 else ''}{symbol}**{power}" if b != 0 else ''
     part4 = f" {'+' if e >= 0 else '-'} {abs(e)}" if e != 0 else ''
     
     if a == -1:
