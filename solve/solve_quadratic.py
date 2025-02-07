@@ -200,8 +200,6 @@ def format_solution(solution):
     return str(fraction)
 
 def generate_equation_and_solution(a, b, d, e, symbol):
-    
-    
     part1 = f"{a if a != 1 else ''}{symbol}" if a != 0 else ''
     part2 = f" {'+' if d >= 0 else '-'} {abs(d)}" if d != 0 else ''
     part3 = f"{b if b != 1 else ''}{symbol}" if b != 0 else ''
@@ -219,7 +217,6 @@ def generate_equation_and_solution(a, b, d, e, symbol):
 
     return [equation, solutions]
 
-            
 def unique_solutions(solutions):
     unique_solutions = []
     for solution in solutions:
@@ -227,6 +224,34 @@ def unique_solutions(solutions):
             unique_solutions.append(solution)
     return unique_solutions
 
+def calculate_factors(factors_a, factors_c, B):
+    for factor_a in factors_a:
+        for factor_c in factors_c:
+            if factor_a[0] * factor_c[1] + factor_a[1] * factor_c[0] == B:
+                return factor_a[0], factor_a[1], factor_c[0], factor_c[1]
+    return 0, 0, 0, 0
+
+def solve_non_zero_c(A, B, c, symbol, factors_a, factors_c):
+    a, b, d, e = calculate_factors(factors_a, factors_c, B)
+    equation, solutions = generate_equation_and_solution(a, b, d, e, symbol)
+    result = [equation]
+    solutions = unique_solutions(solutions)
+    result.append(solutions)
+    return result
+
+def generate_factored_equation(a, b, d, e, symbol, power=1):
+    part1 = f"{a if a != 1 else ''}{symbol}^{power}" if a != 0 else ''
+    part2 = f" {'+' if d >= 0 else '-'} {abs(d)}" if d != 0 else ''
+    part3 = f"{b if b != 1 else ''}{symbol}^{power}" if b != 0 else ''
+    part4 = f" {'+' if e >= 0 else '-'} {abs(e)}" if e != 0 else ''
+    
+    if a == -1:
+        part1 = f"-{symbol}^{power}"
+    if b == -1:
+        part3 = f"-{symbol}^{power}"
+    
+    equation = f"({part1}{part2})({part3}{part4}) = 0"
+    return equation
 
 def solve_quad_factor(equation):
     symbol = find_symbol(equation)
@@ -253,37 +278,7 @@ def solve_quad_factor(equation):
         second_solution = solve_linear_y_intercept_eq(new_equation)[-1]
         solutions.append(second_solution)
         result.append(solutions)
-
     else:
-        """
-        Part below is calculating the right combination for the Factors of A and the factors of C that will be added up to get B 
-        a normal factored out equation looks like this: (ax + d)(bx - e)
-        so we need a*d = A or the coefficient of x^2
-        and we need b*e = C or the constant
-        but we also need b*d + a*e = B which is the coefficient to the middle term
-
-        And we also need to take into consideration what is negative and what is positive to be sure we are producing the correct results
-        """
-        #the factor arrays for a nad c here are written as [[a,n], [b,m]] where a*n = A and ditto for b*m = A
-        a, b, d, e = 0, 0, 0, 0
-        for factor_a in factors_a:
-            for factor_c in factors_c:
-                if factor_a[0]*factor_c[1] + factor_a[1]*factor_c[0] == B:
-                    a = factor_a[0]
-                    b = factor_a[1]
-                    d = factor_c[0]
-                    e = factor_c[1]
-                
-                
-        
-        
-        # the factored out equation will look like this when it is returned (ax + d)(bx + e) = 0
-        equation, solutions = generate_equation_and_solution(a, b, d, e, symbol)
-        result.append(equation)
-        
-        solutions = unique_solutions(solutions)
-        result.append(solutions)
+        result = solve_non_zero_c(A, B, c, symbol, factors_a, factors_c)
 
     return result
-
-

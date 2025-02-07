@@ -227,7 +227,6 @@ def solve_synthetic_division(equation):
             results.append(quad_sol[1][0])
     
     solution.append(results)
-    
     return solution
 
 def solve_sum_diff_of_cubes(equation):
